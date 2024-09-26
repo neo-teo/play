@@ -9,8 +9,6 @@
 
 	const sketch: Sketch = (p) => {
 		const fireworks: Firework[] = [];
-		// const letters = ["S", "M", "H"];
-		// let lettersCounter = 0;
 		let gravity;
 
 		let s: number = -1;
@@ -42,10 +40,6 @@
 			for (let index = fireworks.length - 1; index >= 0; index--) {
 				const fw = fireworks[index];
 				if (mExploded) {
-					if (fw.letter === '?') {
-						fireworks.splice(index, 1);
-					}
-
 					if (fw.letter === 'S' && fw.particles.length > 0) {
 						fireworks.splice(index, 1);
 					}
@@ -56,7 +50,12 @@
 				}
 
 				if (hExploded) {
-					if (fw.letter === 'H' && fw.particles[0].letter !== p.hour()) {
+					let hr = p.hour() % 12 || 12;
+					if (fw.letter === 'H' && fw.particles[0].letter !== hr) {
+						fireworks.splice(index, 1);
+					}
+
+					if (fw.letter === '?') {
 						fireworks.splice(index, 1);
 					}
 				}
@@ -67,15 +66,7 @@
 
 		const sendFireworkUp = (letter: string) => {
 			fireworks.push(new Firework(p.random(p.width), p.height, letter, p, onFireworkExplode));
-			// updateCounter();
 		};
-
-		// const updateCounter = () => {
-		//     lettersCounter++;
-		//     if (lettersCounter >= letters.length) {
-		//         lettersCounter = 0;
-		//     }
-		// };
 
 		p.windowResized = () => {
 			p.resizeCanvas(p.windowWidth, p.windowHeight);
@@ -117,10 +108,9 @@
 		};
 
 		p.mousePressed = () => {
-			fireworks.push(new Firework(p.mouseX, p.mouseY, '?', p));
-			// updateCounter();
+			fireworks.length = 0;
 
-			// clearInterval(fireworkEverySecond);
+			fireworks.push(new Firework(p.mouseX, p.mouseY, '?', p));
 		};
 
 		p.mouseMoved = () => {

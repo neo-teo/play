@@ -2,7 +2,7 @@
 
 import Particle from "./particle"; // Make sure to import the Particle class
 
-const palette = ['#537DBD', '#CA683E', '#D3B934', '#AF9E7D', '#D85959', '#956750', '#277325', '#F3B524', '#972723', '#5B388B', '#686B1C', '#142D86', '#A1A329', '#BF1E16', '#3853A5', '#D7537E', '#E99F22', '#CE5310', '#613B31']
+const palette = ['#FF0000', '#FFD700', '#1E90FF', '#32CD32', '#8B4513', '#FF4500', '#800080', '#FF8C00', '#8B0000', '#F08080', '#FFA07A', '#ADFF2F', '#6495ED', '#D2691E', '#DA70D6'];
 
 export default class Firework {
 
@@ -14,6 +14,8 @@ export default class Firework {
             size = 100;
         } else if (letter === "H") {
             size = 200;
+        } else if (letter === "?") {
+            size = 300;
         }
 
         this.p = p;
@@ -25,14 +27,6 @@ export default class Firework {
         this.size = size;
         this.onExplode = onExplode;
     }
-
-    // done() {
-    //     if (this.exploded && this.particles.length === 0) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
 
     update() {
         let gravity = this.p.createVector(0, 0.13);
@@ -48,7 +42,6 @@ export default class Firework {
 
         for (let i = this.particles.length - 1; i >= 0; i--) {
             if (!this.particles[i].done()) {
-                // this.particles.splice(i, 1);
                 this.particles[i].applyForce(gravity);
                 this.particles[i].update();
             }
@@ -56,21 +49,23 @@ export default class Firework {
     }
 
     explode() {
-        // let h = this.p.hour() % 12 || 12;
+        let h = this.p.hour() % 12 || 12;
         let particleInfo = this.letter === "S"
             ? this.p.second()
             : this.letter === "M"
                 ? this.p.minute()
                 : this.letter === "H"
-                    ? this.p.hour()
-                    : this.letter;
+                    ? h
+                    : this.letter === "?"
+                        ? "it's\nmade up\nanyway"
+                        : this.letter;
         let numParticles = this.letter === "S"
             ? 1
             : this.letter === "M"
                 ? 3
                 : this.letter === "H"
                     ? 6
-                    : 3
+                    : 10
         for (let i = 0; i < numParticles; i++) {
             const ptcl = new Particle(this.firework.pos.x, this.firework.pos.y, this.p.random(palette), particleInfo, this.size, false, this.p);
             this.particles.push(ptcl);

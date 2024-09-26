@@ -50,10 +50,8 @@ export default class Particle {
     }
 
     show() {
-        this.p.textSize(30);
-        this.p.angleMode(this.p.DEGREES);
-
         if (!this.firework) {
+            this.p.angleMode(this.p.DEGREES);
             this.p.push();
             this.p.translate(this.pos.x, this.pos.y);
             this.p.rotate(this.rotation);
@@ -64,11 +62,17 @@ export default class Particle {
 
             this.p.textSize(this.size / 2);
 
+            let yOffset = this.size / 6;
+
+            if (this.size === 300) {
+                this.p.textSize(this.size / 6);
+                yOffset = -this.size / 5;
+            }
+
             this.p.fill('#EFEDE4');
-            this.p.text(this.letter, -9, 10);
+            this.p.text(this.letter, -this.size / 4, yOffset);
             this.p.pop();
         } else {
-
             this.p.angleMode(this.p.RADIANS);
             this.p.push();
             this.p.translate(this.pos.x, this.pos.y);
@@ -81,7 +85,7 @@ export default class Particle {
             this.p.textSize(this.size / 2);
 
             this.p.fill('#000');
-            this.p.text(this.letter, -9, 10);
+            this.p.text(this.letter, -this.size / 4, this.size / 7);
             this.p.pop();
         }
     }

@@ -1,0 +1,20 @@
+This is a firework clock. 
+
+Hours are larger than minutes which are larger than seconds. Minute fireworks make "expired" 
+seconds disappear, and hour fireworks make "expired" minutes disappear. 
+
+Click for a fun easter egg.
+
+The code has been adapted from Cotton design studio's Paul Rand visualizer: https://cotton.design/launch/ 
+which itself was adapted from Daniel Schiffman's fireworks: https://youtu.be/CKeyIbT3vXI
+
+I loved Cotton's take on the firework. I think the randomness yet orderliness looks mesmerizing. 
+I really wanted to make my own version of it so I guess this is that.
+
+The experience of taking this existing code from the browser source and adapting it has been awesome. 
+I hope to edit the look and feel of this a bit more eventually so it is a more original take on the 
+work I was inspired by.
+
+I was also considering making a "snake game" version of a clock, where the snake moves every second, each
+body part is a minute, and if you make it to an hour you get a special wow screen, but ended up going for 
+fireworks because I got excited once I got the existing code to run locally and started adapting it.
