@@ -12,12 +12,10 @@
 		// const letters = ["S", "M", "H"];
 		// let lettersCounter = 0;
 		let gravity;
-		// let clicked = false;
-		// let fireworkEverySecond: NodeJS.Timeout;
 
-		let s: number = 0;
-		let m: number = 0;
-		let hr: number = 0;
+		let s: number = -1;
+		let m: number = -1;
+		let hr: number = -1;
 
 		p.setup = () => {
 			p.createCanvas(p.windowWidth, p.windowHeight);
@@ -26,16 +24,49 @@
 			p.stroke(255);
 			p.strokeWeight(4);
 			p.background(0);
+		};
 
-			s = p.second();
-			m = p.minute();
-			hr = p.hour();
+		let mExploded = false;
+		let hExploded = false;
 
-			// fireworkEverySecond = setInterval(sendFireworkUp, 1000);
+		const onFireworkExplode = (letter: string) => {
+			if (letter === 'M') {
+				mExploded = true;
+			}
+			if (letter === 'H') {
+				hExploded = true;
+			}
+		};
+
+		const removeExpiredFireworks = () => {
+			for (let index = fireworks.length - 1; index >= 0; index--) {
+				const fw = fireworks[index];
+				if (mExploded) {
+					if (fw.letter === '?') {
+						fireworks.splice(index, 1);
+					}
+
+					if (fw.letter === 'S' && fw.particles.length > 0) {
+						fireworks.splice(index, 1);
+					}
+
+					if (fw.letter === 'M' && fw.particles[0].letter !== p.minute()) {
+						fireworks.splice(index, 1);
+					}
+				}
+
+				if (hExploded) {
+					if (fw.letter === 'H' && fw.particles[0].letter !== p.hour()) {
+						fireworks.splice(index, 1);
+					}
+				}
+			}
+			mExploded = false;
+			hExploded = false;
 		};
 
 		const sendFireworkUp = (letter: string) => {
-			fireworks.push(new Firework(p.random(p.width), p.height, letter, p));
+			fireworks.push(new Firework(p.random(p.width), p.height, letter, p, onFireworkExplode));
 			// updateCounter();
 		};
 
@@ -55,12 +86,10 @@
 			p.clear();
 
 			if (hr != p.hour()) {
-				fireworks.length = 0;
 				sendFireworkUp('H');
 				hr = p.hour();
 			}
 			if (m != p.minute()) {
-				fireworks.length = 0;
 				sendFireworkUp('M');
 
 				m = p.minute();
@@ -73,11 +102,9 @@
 			for (let i = 0; i < fireworks.length; i++) {
 				fireworks[i].update();
 				fireworks[i].show();
-
-				if (fireworks[i].done()) {
-					fireworks.splice(i, 1);
-				}
 			}
+
+			removeExpiredFireworks();
 
 			p.textSize(20);
 			p.textStyle(p.BOLD);
@@ -90,8 +117,7 @@
 		};
 
 		p.mousePressed = () => {
-			// clicked = true;
-			fireworks.push(new Firework(p.mouseX, p.mouseY, 'EY', p));
+			fireworks.push(new Firework(p.mouseX, p.mouseY, '?', p));
 			// updateCounter();
 
 			// clearInterval(fireworkEverySecond);

@@ -16,8 +16,15 @@ export default class Particle {
         if (this.firework) {
             this.vel = this.p.createVector(0, this.p.random(-12, -8));
         } else {
+            let displacement = this.p.random(4, 15);
+
+            if (letter === this.p.hour()) {
+                displacement = this.p.random(20, 30);
+            } else if (letter === this.p.minute()) {
+                displacement = this.p.random(10, 20);
+            }
             this.vel = p.Vector.random2D();
-            this.vel.mult(this.p.random(4, 15));
+            this.vel.mult(displacement);
         }
     }
 

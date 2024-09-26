@@ -6,12 +6,12 @@ const palette = ['#537DBD', '#CA683E', '#D3B934', '#AF9E7D', '#D85959', '#956750
 
 export default class Firework {
 
-    constructor(x, y, letter, p) {
-        let size = 10
+    constructor(x, y, letter, p, onExplode) {
+        let size = 35
         if (letter === "S") {
             size = 35;
         } else if (letter === "M") {
-            size = 70;
+            size = 100;
         } else if (letter === "H") {
             size = 200;
         }
@@ -23,15 +23,16 @@ export default class Firework {
         this.particles = [];
         this.letter = letter;
         this.size = size;
+        this.onExplode = onExplode;
     }
 
-    done() {
-        if (this.exploded && this.particles.length === 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // done() {
+    //     if (this.exploded && this.particles.length === 0) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
     update() {
         let gravity = this.p.createVector(0, 0.13);
@@ -63,9 +64,20 @@ export default class Firework {
                 : this.letter === "H"
                     ? this.p.hour()
                     : this.letter;
-        for (let i = 0; i < 3; i++) {
+        let numParticles = this.letter === "S"
+            ? 1
+            : this.letter === "M"
+                ? 3
+                : this.letter === "H"
+                    ? 6
+                    : 3
+        for (let i = 0; i < numParticles; i++) {
             const ptcl = new Particle(this.firework.pos.x, this.firework.pos.y, this.p.random(palette), particleInfo, this.size, false, this.p);
             this.particles.push(ptcl);
+        }
+
+        if (this.onExplode) {
+            this.onExplode(this.letter);
         }
     }
 
