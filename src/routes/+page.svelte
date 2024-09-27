@@ -12,8 +12,5 @@
 		class="rotate-[-2deg] underline text-blue-600 hover:text-gray-200">face</a
 	>
 
-	<a
-		href="https://teo.fyi/cc/mouse"
-		class="rotate-[7deg] underline text-blue-600 hover:text-gray-200">mouse</a
-	>
+	<a href="/mouse" class="rotate-[12deg] underline text-blue-600 hover:text-gray-200">mouse</a>
 </div>
