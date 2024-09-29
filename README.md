@@ -13,4 +13,4 @@ npm install
 npm run dev
 ```
 
-You should now see the app running at localhost:5173 and individual sketches at localhost:5173/<sketchname> where <sketchname> comes from the sketch folder name (e.g. localhost:5173/face)
+You should now see the app running at localhost:5173 and individual sketches at localhost:5173/\<sketchname\> where \<sketchname\> comes from the sketch folder name (e.g. localhost:5173/face)
