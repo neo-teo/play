@@ -1,19 +1,12 @@
 <script lang="ts">
 	import P5 from 'p5-svelte';
 	import type { Sketch } from '$lib/types';
-	import p5 from 'p5';
+	import Ball from './ball';
 
 	type FallingObject = {
 		x: any;
 		y: any;
 		draw: (drawX: any, drawY: any) => void;
-	};
-
-	type BoundObject = {
-		object: FallingObject;
-		relativeX: number;
-		relativeY: number;
-		relativeRotation: number;
 	};
 
 	const sketch: Sketch = (p) => {
@@ -22,25 +15,14 @@
 		let fallingObjectType: 'eye' | 'banana' | 'twizzler';
 		let fallingSpeed = 4;
 
-		// ball properties
-		let ballR = p.random(100, 200);
-		let ballX: number;
-		let ballMoveSpeed = 6;
-		let ballRotation = 0;
-		let ballRotationSpeed = 6;
-		let ballColor: p5.Color;
-		let ballNoise = p.random(5, 10);
-
-		// objects that are bound to ball
-		let boundObjects: BoundObject[] = [];
+		let ball: Ball;
 
 		p.setup = () => {
 			p.createCanvas(p.windowWidth, p.windowHeight);
 
-			ballX = p.width / 2;
 			fallingObject = randomFallingObject();
 
-			ballColor = p.color(p.random(255), p.random(255), p.random(255));
+			ball = new Ball(p);
 		};
 
 		p.windowResized = () => {
@@ -49,10 +31,7 @@
 
 		// reset on mouse click
 		p.mouseClicked = () => {
-			boundObjects = [];
-			ballR = p.random(100, 200);
-			ballNoise = p.random(10, 15);
-			ballColor = p.color(p.random(255), p.random(255), p.random(255));
+			ball.reset();
 		};
 
 		// save canvas as image on 's'
@@ -77,7 +56,7 @@
 
 			legend();
 
-			rollingBall();
+			ball.draw();
 
 			dropObject();
 		};
@@ -88,21 +67,27 @@
 				fallingObject.draw(fallingObject.x, fallingObject.y);
 
 				// calculate if object should be bound to ball, with some help from llms
-				let distanceToBall = p.dist(fallingObject.x, fallingObject.y, ballX, p.height - ballR / 2);
-				let intersectionThreshold = ballR / 2 - ballR / 4;
+				let distanceToBall = p.dist(
+					fallingObject.x,
+					fallingObject.y,
+					ball.ballX,
+					p.height - ball.ballR / 2
+				);
+				let intersectionThreshold = ball.ballR / 2 - ball.ballR / 4;
 				if (fallingObjectType === 'twizzler') {
-					intersectionThreshold = ballR / 2;
+					intersectionThreshold = ball.ballR / 2;
 				}
 
 				if (distanceToBall <= intersectionThreshold) {
 					let angle =
-						p.atan2(fallingObject.y - (p.height - ballR / 2), fallingObject.x - ballX) -
-						p.radians(ballRotation);
-					boundObjects.push({
+						p.atan2(fallingObject.y - (p.height - ball.ballR / 2), fallingObject.x - ball.ballX) -
+						p.radians(ball.ballRotation);
+
+					ball.bindObject({
 						object: fallingObject,
 						relativeX: p.cos(angle) * distanceToBall,
 						relativeY: p.sin(angle) * distanceToBall,
-						relativeRotation: p.radians(ballRotation)
+						relativeRotation: p.radians(ball.ballRotation)
 					});
 
 					fallingObject = null;
@@ -113,51 +98,6 @@
 					fallingObject = randomFallingObject();
 				}
 			}
-		}
-
-		function rollingBall() {
-			p.push();
-			if (p.mouseX > ballX + ballR / 4) {
-				if (ballX < p.width - ballR / 2) {
-					ballX += ballMoveSpeed;
-					ballRotation += ballRotationSpeed;
-				}
-			} else if (p.mouseX < ballX - ballR / 4) {
-				if (ballX > ballR / 2) {
-					ballX -= ballMoveSpeed;
-					ballRotation -= ballRotationSpeed;
-				}
-			}
-
-			// draw the ball
-			p.fill(ballColor);
-			p.translate(ballX, p.height - ballR / 2 + ballNoise / 2);
-			p.rotate(p.radians(ballRotation));
-			drawOrganicBall(ballR / 2, ballNoise);
-
-			// draw objects bound to the ball
-			for (let bound of boundObjects) {
-				p.push();
-				p.translate(bound.relativeX, bound.relativeY);
-				p.rotate(-bound.relativeRotation); // not sure why this should be -1 *, but it works that way lol!
-				bound.object.draw(0, 0);
-				p.pop();
-			}
-			p.pop();
-		}
-
-		// draw organic shape ball with the help of llms
-		function drawOrganicBall(radius: number, noiseAmount: number) {
-			p.beginShape();
-			for (let angle = 0; angle < p.TWO_PI; angle += 0.1) {
-				let xoff = p.map(p.cos(angle), -1, 1, 0, 1);
-				let yoff = p.map(p.sin(angle), -1, 1, 0, 1);
-				let r = radius + p.map(p.noise(xoff, yoff), 0, 1, -noiseAmount, noiseAmount);
-				let x = r * p.cos(angle);
-				let y = r * p.sin(angle);
-				p.vertex(x, y);
-			}
-			p.endShape(p.CLOSE);
 		}
 
 		function randomFallingObject() {
