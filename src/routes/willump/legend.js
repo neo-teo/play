@@ -16,7 +16,7 @@ export default class Legend {
         this.legendSize = legendSize;
 
         this.isHovered = false;
-        this.isExpanded = true; // TODO: uncheck
+        this.isExpanded = false;
     }
 
     draw() {
