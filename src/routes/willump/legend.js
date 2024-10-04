@@ -98,7 +98,7 @@ export default class Legend {
         this.p.push();
         this.p.translate(
             this.p.width * 0.5,
-            this.p.height * 0.5 + 120
+            this.p.height < 700 ? this.p.height * 0.5 + 20 : this.p.height * 0.5 + 120
         )
 
         this.p.fill(255, 240, 200, 250);
@@ -132,9 +132,9 @@ export default class Legend {
         this.p.text("    eye", -170, lineHeight * 1);
 
         this.p.rotate(5);
-        this.p.text("  they say his golden ear ", -160, lineHeight * 6);
+        this.p.text("  they say his golden ear ", -170, lineHeight * 6);
         this.p.rotate(-2);
-        this.p.text("shines under the moon's eye", -160, lineHeight * 7);
+        this.p.text("shines under the moon's eye", -180, lineHeight * 7);
 
         this.p.text
         this.p.pop();
