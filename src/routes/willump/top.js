@@ -15,9 +15,9 @@ export default class Top {
 
     draw() {
         this.x = this.p.width / 2;
-        this.y = this.p.height / 3;
+        this.y = this.p.height - 280 - 90 - 135;
 
-        this.headSize = 140;
+        this.headSize = 130;
 
         this.p.noStroke();
         this.p.rectMode(this.p.CENTER);
@@ -224,7 +224,7 @@ export default class Top {
 
         // left ear earring hole
         this.p.rotate(35);
-        this.p.fill('white');
+        this.p.fill('#FFFBF3');
         this.p.ellipse(-rightEarW * 1.65, -rightEarH / 3, rightEarW / 5, rightEarW / 4);
 
         // left ear earring hoop rotation
@@ -233,8 +233,9 @@ export default class Top {
         this.p.translate(-rightEarW * 1.62, -rightEarH / 4);
 
         // jiggle for earring
-        let earringJiggleSpeed = this.isHovering ? 60 : 3; // Speed up the jiggle on hover
-        let earringJiggle = this.p.sin(this.p.frameCount * earringJiggleSpeed) * this.p.degrees(0.3); // Independent jiggle
+        let earringJiggleSpeed = this.isHovering ? 20 : 4; // Speed up the jiggle on hover
+        let earringMaxRotate = this.isHovering ? this.p.degrees(0.6) : this.p.degrees(0.2);
+        let earringJiggle = this.p.sin(this.p.frameCount * earringJiggleSpeed) * earringMaxRotate; // Independent jiggle
 
         this.p.rotate(earringJiggle);
 

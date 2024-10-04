@@ -10,9 +10,9 @@ export default class Middle {
 
     draw() {
         this.x = this.p.width / 2;
-        this.y = this.p.height / 2;
+        this.y = this.p.height - 280 - 90;
 
-        this.bodySize = 200;
+        this.bodySize = 185;
 
         this.p.noStroke();
         this.p.rectMode(this.p.CENTER);

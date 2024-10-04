@@ -10,9 +10,9 @@ export default class Bottom {
 
     draw() {
         this.x = this.p.width / 2;
-        this.y = this.p.height / 2 + 75;
+        this.y = this.p.height - 280;
 
-        this.pantsW = 280;
+        this.pantsW = 260;
 
         this.p.noStroke();
         this.p.rectMode(this.p.CENTER);
