@@ -1,7 +1,7 @@
 <div class="flex flex-col items-center gap-10 py-10 text-2xl">
 	<img src="/skater.gif" alt="skater gif" class="py-16 w-[10rem] mr-[3.5rem]" />
 
-	<a href="/cypher" class="rotate-[5deg] underline text-blue-600 hover:text-gray-200">cypher</a>
+	<a href="/cipher" class="rotate-[5deg] underline text-blue-600 hover:text-gray-200">cipher</a>
 
 	<a href="/willump" class="rotate-[-2deg] underline text-blue-600 hover:text-gray-200">willump</a>
 
