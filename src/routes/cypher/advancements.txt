@@ -1,0 +1,5 @@
+Potential enhancements: 
+
+1) Make an "encryption" which is using llm to get word of the same length, this could bring up interesting results.
+2) Encrypt as shapes of proper size, rectangles ellipses.
+3) Plug in a little db, allow people to send these to each other.
