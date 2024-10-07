@@ -6,18 +6,7 @@
 	import { encrypt } from './encryptionHelper';
 	import Sentences from './Sentences.svelte';
 
-	let sentences = [
-		{
-			id: Date.now(),
-			decrypted: 'type a sentence you want to encrypt into the input box above and click plus',
-			method: 'lowercase'
-		},
-		{
-			id: Date.now() + 1,
-			decrypted: 'you can also change the encryption method used',
-			method: 'x'
-		}
-	];
+	let sentences = [];
 
 	function addSentence(event) {
 		const { text, method } = event.detail;

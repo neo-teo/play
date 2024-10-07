@@ -57,7 +57,10 @@
 	}
 </script>
 
-<div class="border border-black p-4 pb-2 flex flex-col gap-2">
+<div class="border border-black p-4 flex flex-col gap-2">
+	{#if sentences.length === 0}
+		enter a message you want to encrypt above and press plus (or enter)
+	{/if}
 	{#each sentences as sentence, i}
 		<button
 			class="group w-full text-left border-black p-3 flex items-start gap-3 hover:italic"
