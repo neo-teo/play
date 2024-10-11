@@ -1,0 +1,10 @@
+Tough week 4 me -- no internet for 2 days, lost my phone. Was only able to work on this for a bit late last night.
+
+I decided the goal was to make an illusion that is "revealed" when the user clicks the mouse. 
+
+I tried to do the "what color are the squares in the middle" illusion. 
+Clicking the mouse expands the center color until it covers the whole screen, revealing they were indeed the same.
+Clicking again resets to a new color palette.
+
+At its best (if I changed the illusion / reveal) to something more interesting, ideally it would be a fun site to 
+share with friends.
