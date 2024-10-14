@@ -4,7 +4,7 @@ export default class Jellayer {
     constructor(p) {
         this.r = p.random(50, 200);
         this.color = p.color(p.random(255), p.random(255), p.random(255), p.random(100, 180));;
-        this.noise = this.r / 5;
+        this.noise = p.random(this.r / 5, this.r / 10);
         this.p = p;
 
         this.timeOffset = 0; // Initialize timeOffset here

@@ -10,7 +10,27 @@
 			p.createCanvas(p.windowWidth, p.windowHeight);
 			p.noStroke();
 
-			jellies.push(new Jelly(p, p.width / 2, p.height / 2));
+			jellies.push(
+				new Jelly(
+					p,
+					p.random(p.width / 5, (4 * p.width) / 5),
+					p.random(p.height / 5, (4 * p.height) / 5)
+				)
+			);
+			jellies.push(
+				new Jelly(
+					p,
+					p.random(p.width / 5, (4 * p.width) / 5),
+					p.random(p.height / 5, (4 * p.height) / 5)
+				)
+			);
+			jellies.push(
+				new Jelly(
+					p,
+					p.random(p.width / 5, (4 * p.width) / 5),
+					p.random(p.height / 5, (4 * p.height) / 5)
+				)
+			);
 		};
 
 		p.windowResized = () => {
