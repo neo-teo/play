@@ -13,9 +13,17 @@ export default class Jelly {
         this.accY = 0;
         this.maxSpeed = 2;
         this.maxForce = 0.1;
-        this.changeDirectionInterval = 100; // Change direction every 100 frames
+        this.changeDirectionInterval = 100;
         this.frameCount = 0;
-        this.radius = 50; // Approximate radius of the jellyfish for boundary checking
+        this.radius = 50;
+
+        // Properties for scaling
+        this.baseScale = 1;
+        this.currentScale = 1;
+        this.targetScale = 1;
+        this.scaleSpeed = 0.05;
+        this.maxScale = 1.2;
+        this.isHovered = false;
 
         for (let i = 0; i < 3; i++) {
             this.layers.push(new Jellayer(p));
@@ -28,34 +36,33 @@ export default class Jelly {
     }
 
     update() {
-        // Update velocity
+        // Existing update logic
         this.velX += this.accX;
         this.velY += this.accY;
 
-        // Limit speed
         let speed = Math.sqrt(this.velX * this.velX + this.velY * this.velY);
         if (speed > this.maxSpeed) {
             this.velX = (this.velX / speed) * this.maxSpeed;
             this.velY = (this.velY / speed) * this.maxSpeed;
         }
 
-        // Update position
         this.x += this.velX;
         this.y += this.velY;
 
-        // Check and handle screen boundaries
         this.handleBoundaries();
 
-        // Reset acceleration
         this.accX = 0;
         this.accY = 0;
 
-        // Change direction occasionally
         this.frameCount++;
         if (this.frameCount >= this.changeDirectionInterval) {
             this.changeDirection();
             this.frameCount = 0;
         }
+
+        // Check for hover and update scale
+        this.checkHover();
+        this.updateScale();
     }
 
     handleBoundaries() {
@@ -82,10 +89,26 @@ export default class Jelly {
         this.applyForce(this.p.cos(angle) * force, this.p.sin(angle) * force);
     }
 
+    // New method to check if mouse is hovering over the jellyfish
+    checkHover() {
+        let d = this.p.dist(this.x, this.y, this.p.mouseX, this.p.mouseY);
+        this.isHovered = d < this.radius;
+    }
+
+    // Updated method to update scale based on hover state
+    updateScale() {
+        this.targetScale = this.isHovered ? this.maxScale : this.baseScale;
+        this.currentScale = this.p.lerp(this.currentScale, this.targetScale, this.scaleSpeed);
+    }
+
     draw() {
         this.update();
+        this.p.push();
+        this.p.translate(this.x, this.y);
+        this.p.scale(this.currentScale);
         for (let layer of this.layers) {
-            layer.draw(this.x, this.y);
+            layer.draw(0, 0);  // Draw relative to the jellyfish center
         }
+        this.p.pop();
     }
 }
