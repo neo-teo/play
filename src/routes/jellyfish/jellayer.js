@@ -1,25 +1,24 @@
 // @ts-nocheck
 
-export default class Liquid {
+export default class Jellayer {
     constructor(p) {
-        this.ballR = p.random(200, 400);
-        this.ballX = p.width / 2;
-        this.ballColor = p.color(p.random(255), p.random(255), p.random(255), p.random(100, 180));;
-        this.ballNoise = this.ballR / 5;
+        this.r = p.random(50, 200);
+        this.color = p.color(p.random(255), p.random(255), p.random(255), p.random(100, 180));;
+        this.noise = this.r / 5;
         this.p = p;
 
         this.timeOffset = 0; // Initialize timeOffset here
     }
 
-    draw() {
+    draw(x, y) {
         this.p.push();
 
         // draw the ball
-        this.p.fill(this.ballColor);
-        this.p.translate(this.ballX, this.p.height / 2);
+        this.p.fill(this.color);
+        this.p.translate(x, y);
 
-        let radius = this.ballR / 2;
-        let noiseAmount = this.ballNoise;
+        let radius = this.r / 2;
+        let noiseAmount = this.noise;
         this.p.beginShape();
         for (let angle = 0; angle < this.p.TWO_PI; angle += 0.1) {
             let xoff = this.p.map(this.p.cos(angle), -1, 1, 0, 1);

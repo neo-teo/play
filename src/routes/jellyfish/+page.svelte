@@ -1,20 +1,16 @@
 <script lang="ts">
 	import P5 from 'p5-svelte';
 	import type { Sketch } from '$lib/types';
-	import Liquid from './liquid';
+	import Jelly from './jelly';
 
 	const sketch: Sketch = (p) => {
-		let water: Liquid;
-		let beer: Liquid;
-		let coffee: Liquid;
+		let jellies: Jelly[] = [];
 
 		p.setup = () => {
 			p.createCanvas(p.windowWidth, p.windowHeight);
 			p.noStroke();
 
-			water = new Liquid(p);
-			coffee = new Liquid(p);
-			beer = new Liquid(p);
+			jellies.push(new Jelly(p, p.width / 2, p.height / 2));
 		};
 
 		p.windowResized = () => {
@@ -22,17 +18,16 @@
 		};
 
 		p.draw = () => {
-			p.background(255);
+			p.background('white');
+			p.background(184, 241, 252, 100);
 
-			water.draw();
-			coffee.draw();
-			beer.draw();
+			for (let jelly of jellies) {
+				jelly.draw();
+			}
 		};
 
 		p.mouseClicked = () => {
-			water = new Liquid(p);
-			coffee = new Liquid(p);
-			beer = new Liquid(p);
+			jellies.push(new Jelly(p, p.mouseX, p.mouseY));
 		};
 	};
 </script>

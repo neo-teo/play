@@ -9,9 +9,11 @@
 		let coffee: Liquid;
 
 		p.setup = () => {
+			// TODO: days should b vertically stacked. canvas should be windowHeight * num elements in data lol
 			p.createCanvas(p.windowWidth, p.windowHeight);
 			p.noStroke();
 
+			// TODO: pass in amounts and other info from data that styles them . pos is random within day type shit .
 			water = new Liquid(p);
 			coffee = new Liquid(p);
 			beer = new Liquid(p);
