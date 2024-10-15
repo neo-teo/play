@@ -3,20 +3,19 @@
 export default class Liquid {
     constructor(p) {
         this.ballR = p.random(200, 400);
-        this.ballX = p.width / 2;
         this.ballColor = p.color(p.random(255), p.random(255), p.random(255), p.random(100, 180));;
-        this.ballNoise = this.ballR / 5;
+        this.ballNoise = p.random(this.ballR / 8, this.ballR / 10);
         this.p = p;
 
         this.timeOffset = 0; // Initialize timeOffset here
     }
 
-    draw() {
+    draw(x, y) {
         this.p.push();
 
         // draw the ball
         this.p.fill(this.ballColor);
-        this.p.translate(this.ballX, this.p.height / 2);
+        this.p.translate(x, y);
 
         let radius = this.ballR / 2;
         let noiseAmount = this.ballNoise;
