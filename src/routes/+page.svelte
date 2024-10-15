@@ -9,11 +9,13 @@
 
 	<a href="/willump" class="rotate-[-2deg] underline text-blue-600 hover:text-gray-200">willump</a>
 
-	<a href="/fireworks" class="rotate-[8deg] underline text-blue-600 hover:text-gray-200"
+	<a href="/fireworks" class="rotate-[3deg] underline text-blue-600 hover:text-gray-200"
 		>fireworks</a
 	>
 
 	<a href="/coins" class="rotate-[-10deg] underline text-blue-600 hover:text-gray-200">coins</a>
+
+	<a href="/routine" class="rotate-[7deg] underline text-blue-600 hover:text-gray-200">routine</a>
 
 	<a href="/face" class="rotate-[-3deg] underline text-blue-600 hover:text-gray-200">face</a>
 
