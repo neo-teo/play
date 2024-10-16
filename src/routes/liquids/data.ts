@@ -1,5 +1,5 @@
 type Entry = {
-    drink: 'coffee' | 'seltzer' | 'beer' | 'tequila' | 'water' | 'coca cola';
+    drink: 'coffee' | 'seltzer' | 'beer' | 'tequila' | 'water' | 'coca cola' | 'tea' | 'milk';
     volume: number; // in mL
     brand: string;
     flavor?: string;
@@ -17,7 +17,14 @@ export const data: DailyConsumption[] = [
     {
         date: '2024-10-11', // Friday
         entries: [
-            { drink: "coffee", volume: 350, brand: "Bustelo", source: "deli", addon: "splash of milk", note: "deli cup of bustelo to start the day" },
+            {
+                drink: "coffee",
+                volume: 350,
+                brand: "Bustelo",
+                source: "deli",
+                addon: "splash of milk",
+                note: "deli cup of bustelo to start the day"
+            },
             { drink: "seltzer", volume: 355, brand: "La Croix", flavor: "lime", note: "office drink of choice" },
             { drink: "seltzer", volume: 355, brand: "La Croix", flavor: "lime", note: "office drink of choice" },
             { drink: "beer", volume: 355, brand: "Naragansett", note: "ty xander" },
@@ -64,6 +71,12 @@ export const data: DailyConsumption[] = [
     {
         date: '2024-10-15', // Tuesday
         entries: [
+            { drink: "water", volume: 400, brand: "it's water...", source: "tap", note: "bedside pellegrino bottle" },
+            { drink: "tea", volume: 350, brand: "Cotterley", source: "home", flavor: "?", addon: "some honey", note: "honestly not sure what type of tea it was, french packaging" },
+            { drink: "milk", volume: 100, brand: "Trader Joe's", note: "with raisin bran" },
+            { drink: "coffee", volume: 355, brand: "Peete's", source: "office", note: "machine supposedly needs descaling but have been using it for a while now..." },
+            { drink: "tea", volume: 350, brand: "Twinnings", source: "home", flavor: "Earl Grey", note: "so cold outside..." },
+            { drink: "water", volume: 750, brand: "it's water...", source: "tap", note: "the usual hydration" },
         ]
     }
 ];
