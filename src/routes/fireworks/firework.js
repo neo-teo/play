@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import Particle from "./particle"; // Make sure to import the Particle class
+import Particle from "./particle";
 
 const palette = ['#FF0000', '#FFD700', '#1E90FF', '#32CD32', '#8B4513', '#FF4500', '#800080', '#FF8C00', '#8B0000', '#F08080', '#FFA07A', '#ADFF2F', '#6495ED', '#D2691E', '#DA70D6'];
 

@@ -1,18 +1,18 @@
 <script lang="ts">
 	import P5 from 'p5-svelte';
 	import type { Sketch } from '$lib/types';
-	import Liquid from './liquid';
 	import { data } from './data';
-	import type p5 from 'p5';
+	import Button from './button';
+	import Drink from './drink';
 
 	const sketch: Sketch = (p) => {
 		let currDay = 0;
-		let liquids: Liquid[] = [];
+		let drinks: Drink[] = [];
 		let date: string;
-		let hoveredLiquid: Liquid | null = null;
+		let hoveredDrink: Drink | null = null;
 
-		let prevButton: p5.Element;
-		let nextButton: p5.Element;
+		let prevButton: Button;
+		let nextButton: Button;
 
 		p.setup = () => {
 			p.createCanvas(p.windowWidth, p.windowHeight);
@@ -22,41 +22,11 @@
 			p.textStyle(p.BOLD);
 			p.noStroke();
 
-			prevButton = p.createButton('<--');
-			prevButton.style('font-size', '30px');
-			prevButton.style('background-color', 'transparent');
-			prevButton.style('padding', '0 5px 0 5px');
-			prevButton.style('border', 'none');
-
-			nextButton = p.createButton('-->');
-			nextButton.style('font-size', '30px');
-			nextButton.style('background-color', 'transparent');
-			nextButton.style('padding', '0 5px 0 5px');
-			nextButton.style('border', 'none');
-
-			prevButton.mousePressed(prevDay);
-			nextButton.mousePressed(nextDay);
-
-			prevButton.mouseOver(() => {
-				prevButton.style('background-color', 'black');
-				prevButton.style('color', 'white');
-			});
-			prevButton.mouseOut(() => {
-				prevButton.style('background-color', 'transparent');
-				prevButton.style('color', 'black');
-			});
-
-			nextButton.mouseOver(() => {
-				nextButton.style('background-color', 'black');
-				nextButton.style('color', 'white');
-			});
-			nextButton.mouseOut(() => {
-				nextButton.style('background-color', 'transparent');
-				nextButton.style('color', 'black');
-			});
+			prevButton = new Button(p, '<--', prevDay);
+			nextButton = new Button(p, '-->', nextDay);
 
 			date = data[currDay].date;
-			liquids = data[currDay].entries.map((entry) => new Liquid(p, entry));
+			drinks = data[currDay].entries.map((entry) => new Drink(p, entry));
 		};
 
 		p.windowResized = () => {
@@ -67,20 +37,10 @@
 			p.background(255);
 			p.background('#fff5d150');
 
-			hoveredLiquid = null; // Reset hoveredLiquid at the start of each frame
+			hoveredDrink = null;
 
-			if (currDay > 0) {
-				prevButton.show();
-				prevButton.position(p.width / 2 - nextButton.width / 2 - 100, 10);
-			} else {
-				prevButton.hide();
-			}
-			if (currDay < data.length - 1) {
-				nextButton.show();
-				nextButton.position(p.width / 2 - nextButton.width / 2 + 100, 10);
-			} else {
-				nextButton.hide();
-			}
+			prevButton.draw(p.width / 2 - 100, 10, currDay > 0);
+			nextButton.draw(p.width / 2 + 100, 10, currDay < data.length - 1);
 
 			let textSize = p.width < 800 ? 25 : 40;
 
@@ -88,53 +48,50 @@
 			p.textSize(textSize);
 			p.text(readableDate(date), p.width / 2, 90);
 
-			let numLiquids = liquids.length;
+			let numDrinks = drinks.length;
 
-			for (let i = 0; i < numLiquids; i++) {
-				let l = liquids[i];
+			for (let i = 0; i < numDrinks; i++) {
+				let d = drinks[i];
 
-				l.draw(((i % 3) + 1) * (p.width / 4), p.floor(i / 3 + 1) * (p.height / 4));
+				d.draw(((i % 3) + 1) * (p.width / 4), p.floor(i / 3 + 1) * (p.height / 4));
 
-				if (l.isHovered()) {
-					hoveredLiquid = l;
+				if (d.isHovered()) {
+					hoveredDrink = d;
 				}
 			}
 
-			// Display info for hovered liquid
-			if (hoveredLiquid) {
+			if (hoveredDrink) {
 				p.textStyle(p.BOLD);
 				p.textSize(textSize);
 				p.text(
-					`${hoveredLiquid.info.brand} ${hoveredLiquid.info.drink} -- ${hoveredLiquid.info.volume}mL`,
+					`${hoveredDrink.info.brand} ${hoveredDrink.info.drink} -- ${hoveredDrink.info.volume}mL`,
 					p.width / 2,
 					p.height - 90
 				);
 
 				p.textSize(textSize - 5);
-				if (hoveredLiquid.info.addon) {
-					p.text(`with ${hoveredLiquid.info.addon}`, p.width / 2, p.height - 50);
+				if (hoveredDrink.info.addon) {
+					p.text(`with ${hoveredDrink.info.addon}`, p.width / 2, p.height - 50);
 				}
 				p.textStyle(p.BOLDITALIC);
-				p.text(`${hoveredLiquid.info.note}`, p.width / 2, p.height - 20);
+				p.text(`${hoveredDrink.info.note}`, p.width / 2, p.height - 20);
 			}
 		};
 
 		function nextDay() {
-			if (currDay + 1 === data.length) {
-				return;
+			if (currDay < data.length - 1) {
+				currDay++;
+				date = data[currDay].date;
+				drinks = data[currDay].entries.map((entry) => new Drink(p, entry));
 			}
-			currDay++;
-			date = data[currDay].date;
-			liquids = data[currDay].entries.map((entry) => new Liquid(p, entry));
 		}
 
 		function prevDay() {
-			if (currDay - 1 < 0) {
-				return;
+			if (currDay > 0) {
+				currDay--;
+				date = data[currDay].date;
+				drinks = data[currDay].entries.map((entry) => new Drink(p, entry));
 			}
-			currDay--;
-			date = data[currDay].date;
-			liquids = data[currDay].entries.map((entry) => new Liquid(p, entry));
 		}
 	};
 
