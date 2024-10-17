@@ -27,7 +27,7 @@ export const data: DailyConsumption[] = [
             { drink: "beer", volume: 355, brand: "Naragansett", note: "ty xander" },
             { drink: "beer", volume: 355, brand: "Naragansett", note: "1 = 0" },
             { drink: "beer", volume: 355, brand: "Naragansett", note: "nice to meet u matt" },
-            { drink: "seltzer", volume: 1000, brand: "Canada Dry", note: "was feeling like a late night seltzer" },
+            { drink: "seltzer", volume: 800, brand: "Canada Dry", note: "was feeling like a late night seltzer" },
         ]
     },
     {
