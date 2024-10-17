@@ -9,7 +9,7 @@ export default class Liquid {
 
         this.info = entry;
 
-        this.ballR = p.map(entry.volume, 0, 1000, 0, 300);
+        this.ballR = p.map(entry.volume, 0, 1000, 0, 200);
 
         this.cupHandleRotation = this.p.random(0, this.p.TWO_PI);
         this.cupColor = this.p.random(palette);
@@ -143,7 +143,7 @@ export default class Liquid {
         let newBallR = this.p.map(this.info.volume, 0, 1000, 0, 300);
 
         if (this.p.width < 800) {
-            newBallR = this.p.map(this.info.volume, 0, 1000, 0, 200);
+            newBallR = this.p.map(this.info.volume, 0, 1000, 0, 150);
             this.cupR = 500;
         }
 
