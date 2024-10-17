@@ -114,7 +114,7 @@ export default class Liquid {
             if (this.info.carbonated) {
                 this.p.fill(255, 255, 255, 200);
 
-                let radius = this.ballR / 2 - 8;
+                let radius = this.ballR / 2 - 8 > 0 ? this.ballR / 2 - 8 : 0;
                 let noiseAmount = this.drinkNoise;
                 this.p.beginShape();
                 for (let angle = 0; angle < this.p.TWO_PI; angle += 0.1) {

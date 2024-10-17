@@ -25,15 +25,35 @@
 			prevButton = p.createButton('<--');
 			prevButton.style('font-size', '30px');
 			prevButton.style('background-color', 'transparent');
+			prevButton.style('padding', '0 5px 0 5px');
 			prevButton.style('border', 'none');
 
 			nextButton = p.createButton('-->');
 			nextButton.style('font-size', '30px');
 			nextButton.style('background-color', 'transparent');
+			nextButton.style('padding', '0 5px 0 5px');
 			nextButton.style('border', 'none');
 
 			prevButton.mousePressed(prevDay);
 			nextButton.mousePressed(nextDay);
+
+			prevButton.mouseOver(() => {
+				prevButton.style('background-color', 'black');
+				prevButton.style('color', 'white');
+			});
+			prevButton.mouseOut(() => {
+				prevButton.style('background-color', 'transparent');
+				prevButton.style('color', 'black');
+			});
+
+			nextButton.mouseOver(() => {
+				nextButton.style('background-color', 'black');
+				nextButton.style('color', 'white');
+			});
+			nextButton.mouseOut(() => {
+				nextButton.style('background-color', 'transparent');
+				nextButton.style('color', 'black');
+			});
 
 			date = data[currDay].date;
 			liquids = data[currDay].entries.map((entry) => new Liquid(p, entry));
@@ -51,19 +71,21 @@
 
 			if (currDay > 0) {
 				prevButton.show();
-				prevButton.position(p.width / 2 - nextButton.width / 2 - 50, 15);
+				prevButton.position(p.width / 2 - nextButton.width / 2 - 100, 10);
 			} else {
 				prevButton.hide();
 			}
 			if (currDay < data.length - 1) {
 				nextButton.show();
-				nextButton.position(p.width / 2 - nextButton.width / 2 + 50, 15);
+				nextButton.position(p.width / 2 - nextButton.width / 2 + 100, 10);
 			} else {
 				nextButton.hide();
 			}
 
+			let textSize = p.width < 800 ? 25 : 40;
+
 			p.textStyle(p.BOLD);
-			p.textSize(30);
+			p.textSize(textSize);
 			p.text(readableDate(date), p.width / 2, 90);
 
 			let numLiquids = liquids.length;
@@ -81,17 +103,17 @@
 			// Display info for hovered liquid
 			if (hoveredLiquid) {
 				p.textStyle(p.BOLD);
-				p.textSize(30);
+				p.textSize(textSize);
 				p.text(
 					`${hoveredLiquid.info.brand} ${hoveredLiquid.info.drink} -- ${hoveredLiquid.info.volume}mL`,
 					p.width / 2,
-					p.height - 70
+					p.height - 90
 				);
-				p.textSize(20);
+
+				p.textSize(textSize - 5);
 				if (hoveredLiquid.info.addon) {
 					p.text(`with ${hoveredLiquid.info.addon}`, p.width / 2, p.height - 50);
 				}
-
 				p.textStyle(p.BOLDITALIC);
 				p.text(`${hoveredLiquid.info.note}`, p.width / 2, p.height - 20);
 			}

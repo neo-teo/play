@@ -21,12 +21,12 @@ export const data: DailyConsumption[] = [
                 volume: 350,
                 brand: "Deli",
                 addon: "a splash of milk",
-                note: "deli cup of bustelo to start the day"
+                note: "hot dollar cup to start the day"
             },
-            { drink: "seltzer", volume: 355, brand: "La Croix", note: "office drink of choice", carbonated: true },
-            { drink: "seltzer", volume: 355, brand: "La Croix", note: "office drink of choice", carbonated: true },
+            { drink: "seltzer", volume: 355, brand: "La Croix", note: "lime flavor, original is best but oh well", carbonated: true },
+            { drink: "seltzer", volume: 355, brand: "La Croix", note: "ty stuut", carbonated: true },
             { drink: "beer", volume: 355, brand: "Naragansett", note: "ty alexander ly lot", carbonated: true },
-            { drink: "beer", volume: 355, brand: "Naragansett", note: "1 = 0", carbonated: true },
+            { drink: "beer", volume: 355, brand: "Naragansett", note: "1 = 0, 2 = 1", carbonated: true },
             { drink: "beer", volume: 355, brand: "Naragansett", note: "nice to meet u matt", carbonated: true },
             { drink: "seltzer", volume: 800, brand: "Canada Dry", note: "was feeling like a late night seltzer", carbonated: true },
         ]
@@ -80,7 +80,8 @@ export const data: DailyConsumption[] = [
         entries: [
             { drink: "water", volume: 400, brand: "Tap", note: "bedside pellegrino bottle" },
             { drink: "coffee", volume: 350, brand: "Americano", addon: "a splash of milk", note: "needed this one like .... a lot" },
-            { drink: "seltzer", volume: 750, brand: "Saratoga", note: "much needed", carbonated: true }
+            { drink: "seltzer", volume: 750, brand: "Saratoga", note: "much needed", carbonated: true },
+            { drink: "water", volume: 750, brand: "Tap", note: "like there's no tomorrow" },
         ]
     }
 ];
