@@ -45,6 +45,7 @@
 
 		p.draw = () => {
 			p.background(255);
+			p.background('#fff5d150');
 
 			hoveredLiquid = null; // Reset hoveredLiquid at the start of each frame
 

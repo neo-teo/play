@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-const palette = ['#1E90FF80', '#FF450080', '#FF8C0080', '#F0808080', '#6495ED80'];
+const palette = ['#1E90FF', '#FF4500', '#FF8C00', '#F08080', '#6495ED'];
 
 export default class Liquid {
     // info is of type entry, seen in data.ts
@@ -27,20 +27,20 @@ export default class Liquid {
                 this.drinkColor = p.color(150, 114, 89);
                 break;
             case "seltzer":
-                this.drinkColor = p.color(255, 255, 255, 100);
-                this.cupColor = p.color(227, 244, 229, 230)
+                this.drinkColor = p.color(235, 254, 251);
+                this.cupColor = p.color(255, 255, 255, 255);
                 break;
             case "beer":
                 this.drinkColor = p.color(245, 209, 49);
-                this.cupColor = p.color(244, 238, 210, 230);
+                this.cupColor = p.color(244, 238, 210, 255);
                 break;
             case "tequila":
                 this.drinkColor = p.color(248, 239, 180);
-                this.cupColor = p.color(255, 255, 255, 230);
+                this.cupColor = p.color(255, 255, 255, 255);
                 break;
             case "water":
                 this.drinkColor = p.color(235, 254, 251);
-                this.cupColor = p.color(255, 255, 255, 230);
+                this.cupColor = p.color(255, 255, 255, 255);
                 break;
             case "tea":
                 this.drinkColor = p.color(254, 199, 136, 230);
@@ -62,7 +62,6 @@ export default class Liquid {
     drinking = false;
 
     draw(x, y) {
-
         this.sizeThings();
         this.x = x;
         this.y = y;
@@ -82,24 +81,21 @@ export default class Liquid {
             this.p.scale(1);
         }
 
-        this.p.stroke(160, 160, 160, 50);
-        this.p.strokeWeight(2);
 
-        this.p.fill(0, 0, 0, 50)
-        this.p.ellipse(0, 0, this.innerCupR);
 
         this.p.fill(this.cupColor);
         this.p.ellipse(0, 0, this.cupR);
         if (this.info.drink === "coffee" || this.info.drink === "beer" || this.info.drink === "tea") {
-            this.p.noStroke();
             this.p.push();
             this.p.rotate(this.cupHandleRotation);
-            this.p.rect(this.cupR - this.cupR / 2 + this.cupR / 15, 0, this.cupR / 6, this.cupR / 4, this.cupR / 22);
+            this.p.rect(this.cupR - this.cupR / 2 + this.cupR / 15, 0, this.cupR / 6, this.cupR / 3, this.cupR / 22);
             this.p.pop();
         }
 
+        this.p.fill(0, 0, 0, 20)
+        this.p.ellipse(0, 0, this.innerCupR);
+
         if (Math.floor(this.ballR > 1)) {
-            this.p.noStroke();
             this.p.fill(this.drinkColor);
 
             let radius = this.ballR / 2;
@@ -115,9 +111,25 @@ export default class Liquid {
             }
             this.p.endShape(this.p.CLOSE);
 
+            if (this.info.carbonated) {
+                this.p.fill(255, 255, 255, 200);
+
+                let radius = this.ballR / 2 - 8;
+                let noiseAmount = this.drinkNoise;
+                this.p.beginShape();
+                for (let angle = 0; angle < this.p.TWO_PI; angle += 0.1) {
+                    let xoff = this.p.map(this.p.cos(angle), -1, 1, 0, 1);
+                    let yoff = this.p.map(this.p.sin(angle), -1, 1, 0, 1);
+                    let r = radius + this.p.map(this.p.noise(xoff + this.timeOffset, yoff + this.timeOffset), 0, 1, -noiseAmount, noiseAmount);
+                    let x = r * this.p.cos(angle);
+                    let y = r * this.p.sin(angle);
+                    this.p.vertex(x, y);
+                }
+                this.p.endShape(this.p.CLOSE);
+            }
+
             this.timeOffset += this.p.random(0.001, 0.003);
         }
-
 
         this.p.pop();
     }
@@ -136,7 +148,7 @@ export default class Liquid {
         }
 
         this.cupR = newBallR * 1.2;
-        this.innerCupR = newBallR * 1.1;
+        this.innerCupR = newBallR * .95;
 
         if (!this.drinking) {
             this.ballR = newBallR;
