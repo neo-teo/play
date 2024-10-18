@@ -31,15 +31,10 @@
 		};
 
 		const handleTouchMove = (event: TouchEvent) => {
-			// Get the touch position
+			// Get the touch target
 			const touch = event.touches[0];
-			const x = touch.clientX;
-			const y = touch.clientY;
+			const target = document.elementFromPoint(touch.clientX, touch.clientY) as HTMLElement;
 
-			// Use elementFromPoint to get the letter under the finger
-			const target = document.elementFromPoint(x, y) as HTMLElement;
-
-			// Check if the target is a valid letter (should have an inline-block style)
 			if (target && target.style.display === 'inline-block') {
 				handleHover(target);
 			}

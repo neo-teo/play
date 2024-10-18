@@ -1,0 +1,11 @@
+This is a data portrait of all the liquids I've had in a week. 
+
+The user is presented the first day I logged, last Friday, and they can use the arrow keys to toggle between days. 
+When looking at a certain day, I render a "cups" and "liquids" for each drink I've had. The radius of the liquid represents its volume.
+I also use color and a "carbonation" effect to differentiate between different drinks. 
+I added a handle to cups of drinks that are sometimes drank out of a mug or cup with handle, like coffee, tea, beer.
+
+The user can hover a drink to get more info about it and "drink it".
+
+I learned that excluding water I mainly drink coffee and seltzer. Some days I mostly only had seltzer which made me reflect
+on how a couple years ago I didn't even like seltzer.
