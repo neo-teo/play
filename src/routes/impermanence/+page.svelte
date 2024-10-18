@@ -1,14 +1,31 @@
 <script lang="ts">
 	import Letterize from 'letterizejs';
-	import gsap from 'gsap';
 	import { onMount } from 'svelte';
+	import { bouncyBottom } from '$lib/animations';
+	import gsap from 'gsap';
+
+	function randomOffset() {
+		if (Math.random() < 0.5) {
+			return Math.floor(Math.random() * 11) - 20; // Range [-20, -10]
+		} else {
+			return Math.floor(Math.random() * 11) + 10; // Range [10, 20]
+		}
+	}
 
 	onMount(() => {
-		const handleHover = (event) => {
+		const handleHover = (event: any) => {
 			const target = event.target;
 
+			let xoff = randomOffset();
+			let yoff = randomOffset();
+
 			if (event.type === 'mouseenter') {
-				scale(target);
+				var tl = gsap.timeline({ delay: 0 });
+				tl.to(target, {
+					duration: 1,
+					x: `+=${xoff}`,
+					y: `+=${yoff}`
+				});
 			}
 		};
 
@@ -23,27 +40,6 @@
 			span.addEventListener('mouseenter', handleHover);
 			span.addEventListener('mouseleave', handleHover);
 		});
-
-		const scale = (e: Element) => {
-			const windowHeight = window.innerHeight;
-			const elementRect = e.getBoundingClientRect();
-			const distanceToBottom = windowHeight - elementRect.bottom;
-
-			gsap.to(e, {
-				color: 'green',
-				duration: 0.5,
-				yoyo: true,
-				ease: 'power1.inOut'
-			});
-
-			// Create a timeline for the falling effect
-			var tl = gsap.timeline({ delay: Math.random() * 3 });
-			tl.to(e, {
-				duration: 4,
-				y: `+=${distanceToBottom}`, // Move the element to the bottom dynamically
-				ease: 'bounce.out'
-			});
-		};
 	});
 </script>
 
