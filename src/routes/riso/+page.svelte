@@ -6,12 +6,11 @@
 	const sketch = (p) => {
 		let riso;
 		let srcs = [
-			'/riso/lamp.jpeg',
-			'/riso/water.jpeg',
-			'/riso/coffee.jpeg',
-			'/riso/shower.jpeg',
-			'/riso/contacts.jpeg',
-			'/riso/toothbrush.jpeg'
+			// '/riso/oli.jpeg',
+			'/riso/kimon.jpeg',
+			// '/riso/t.jpeg',
+			'/riso/kostis.JPG',
+			'/riso/teo.JPG'
 		];
 		let imgs = [];
 		let imgIdx = 0;
@@ -34,8 +33,8 @@
 
 		let lineW = 4;
 		let lastLineWChange = 0;
-		let lineWInterval = 1500;
-		let lineWVelocity = 1.4;
+		let lineWInterval = 500;
+		let lineWVelocity = 3;
 
 		p.draw = function () {
 			p.background('white');
@@ -51,7 +50,7 @@
 					lineWInterval = 300;
 					lineW = Math.floor(lineW * lineWVelocity);
 
-					if (lineW >= 60) {
+					if (lineW >= 40) {
 						lineWVelocity = 0.7;
 						imgIdx = (imgIdx + 1) % imgs.length;
 					}
