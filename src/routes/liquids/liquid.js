@@ -41,7 +41,7 @@ export default class Liquid {
                 this.liquidCircle(this.r / 2 - 8 > 0 ? this.r / 2 - 8 : 0);
             }
 
-            this.timeOffset += this.p.random(0.001, 0.003);
+            this.timeOffset += this.p.random(0.003, 0.01);
         }
 
         this.p.pop();

@@ -17,14 +17,17 @@ export const data: DailyConsumption[] = [
         date: '2024-10-11', // Friday
         entries: [
             {
-                drink: "coffee",
-                volume: 350,
-                brand: "Deli",
-                addon: "a splash of milk",
-                note: "hot dollar cup to start the day"
+                drink: "coffee", volume: 350, brand: "Deli",
+                addon: "a splash of milk", note: "hot cup thanks blp"
             },
-            { drink: "seltzer", volume: 355, brand: "La Croix", note: "lime flavor, original is best but oh well", carbonated: true },
-            { drink: "seltzer", volume: 355, brand: "La Croix", note: "ty stuut", carbonated: true },
+            {
+                drink: "seltzer", volume: 355, brand: "La Croix",
+                note: "lime flavor, original is best but oh well", carbonated: true
+            },
+            {
+                drink: "seltzer", volume: 355, brand: "La Croix",
+                note: "ty stuut", carbonated: true
+            },
             { drink: "beer", volume: 355, brand: "Naragansett", note: "ty alexander ly lot", carbonated: true },
             { drink: "beer", volume: 355, brand: "Naragansett", note: "1 = 0, 2 = 1", carbonated: true },
             { drink: "beer", volume: 355, brand: "Naragansett", note: "nice to meet u matt", carbonated: true },
@@ -60,7 +63,7 @@ export const data: DailyConsumption[] = [
         entries: [
             { drink: "coffee", volume: 250, brand: "Americano", addon: "a splash of milk", note: "Americano, was looking for a stronger kick this morning" },
             { drink: "water", volume: 500, brand: "Tap", note: "hydration, the unusual" },
-            { drink: "seltzer", volume: 750, brand: "Pellegrino", note: "had to go boujee because Mo was out of schweppes. at least he gave me a discount", carbonated: true },
+            { drink: "seltzer", volume: 750, brand: "Pellegrino", note: "boujee bc Mo was out of schweppes. at least got 1$ off", carbonated: true },
             { drink: "water", volume: 750, brand: "Tap", note: "filled pellegrino from tap lol" },
         ]
     },
@@ -70,18 +73,31 @@ export const data: DailyConsumption[] = [
             { drink: "water", volume: 400, brand: "Tap", note: "bedside pellegrino bottle" },
             { drink: "tea", volume: 350, brand: "Cotterley", addon: "some honey", note: "honestly not sure what type of tea it was, french packaging" },
             { drink: "milk", volume: 200, brand: "Trader Joe's", note: "with raisin bran" },
-            { drink: "coffee", volume: 355, brand: "Drip", note: "machine supposedly needs descaling but have been using it for a while now..." },
+            { drink: "coffee", volume: 355, brand: "Drip", note: "office machine needs descaling ¯\_(ツ)_-" },
             { drink: "tea", volume: 350, brand: "Twinnings", note: "so cold outside..." },
-            { drink: "water", volume: 750, brand: "Tap", note: "the usual hydration" },
+            { drink: "water", volume: 750, brand: "Tap", note: "water water water" },
         ]
     },
     {
         date: '2024-10-16', // Wednesday
         entries: [
-            { drink: "water", volume: 400, brand: "Tap", note: "bedside pellegrino bottle" },
+            { drink: "water", volume: 400, brand: "Tap", note: "bedside morning bottle" },
             { drink: "coffee", volume: 350, brand: "Americano", addon: "a splash of milk", note: "needed this one like .... a lot" },
             { drink: "seltzer", volume: 750, brand: "Saratoga", note: "much needed", carbonated: true },
-            { drink: "water", volume: 750, brand: "Tap", note: "like there's no tomorrow" },
+            { drink: "water", volume: 600, brand: "Tap", note: "like there's no tomorrow" },
+            { drink: "water", volume: 800, brand: "Tap", note: "no tomorrow" },
+        ]
+    },
+    {
+        date: '2024-10-17', // Thursday
+        entries: [
+            { drink: "water", volume: 400, brand: "Tap", note: "bedside morning bottle" },
+            { drink: "coffee", volume: 250, brand: "Drip", note: "cost 4.. and tuna melt was 17 . wtf flatiron" },
+            { drink: "seltzer", volume: 350, brand: "La Croix", note: "inspiring chat with katrina at work today", carbonated: true },
+            { drink: "coffee", volume: 250, brand: "Drip", note: "still needs descaling but coffee." },
+            { drink: "seltzer", volume: 350, brand: "La Croix", note: "officina", carbonated: true },
+            { drink: "water", volume: 500, brand: "Tap", note: "sandwich day -- need water" },
+            { drink: "beer", volume: 500, brand: "Presidente", note: "why not :)", carbonated: true },
         ]
     }
 ];
