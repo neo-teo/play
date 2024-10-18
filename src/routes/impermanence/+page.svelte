@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Letterize from 'letterizejs';
 	import { onMount } from 'svelte';
-	import { bouncyBottom } from '$lib/animations';
 	import gsap from 'gsap';
 
 	function randomOffset() {
@@ -13,19 +12,36 @@
 	}
 
 	onMount(() => {
-		const handleHover = (event: any) => {
-			const target = event.target;
+		let lastElement: HTMLElement | null = null;
 
+		const handleHover = (target: HTMLElement) => {
 			let xoff = randomOffset();
 			let yoff = randomOffset();
 
-			if (event.type === 'mouseenter') {
+			// Prevent animating the same element multiple times in a row
+			if (target !== lastElement) {
+				lastElement = target; // Update to the new element being touched
 				var tl = gsap.timeline({ delay: 0 });
 				tl.to(target, {
 					duration: 1,
 					x: `+=${xoff}`,
 					y: `+=${yoff}`
 				});
+			}
+		};
+
+		const handleTouchMove = (event: TouchEvent) => {
+			// Get the touch position
+			const touch = event.touches[0];
+			const x = touch.clientX;
+			const y = touch.clientY;
+
+			// Use elementFromPoint to get the letter under the finger
+			const target = document.elementFromPoint(x, y) as HTMLElement;
+
+			// Check if the target is a valid letter (should have an inline-block style)
+			if (target && target.style.display === 'inline-block') {
+				handleHover(target);
 			}
 		};
 
@@ -37,9 +53,12 @@
 
 		letters.forEach((span) => {
 			span.style.display = 'inline-block';
-			span.addEventListener('mouseenter', handleHover);
-			span.addEventListener('mouseleave', handleHover);
+			span.addEventListener('mouseenter', (event) => handleHover(span as HTMLElement)); // Desktop hover interaction
 		});
+
+		// Add the touchmove listener to the whole container to capture finger movements
+		const letterizeContainer = document.getElementById('letterize');
+		letterizeContainer?.addEventListener('touchmove', handleTouchMove);
 	});
 </script>
 

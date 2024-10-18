@@ -1,6 +1,10 @@
 <div class="flex flex-col items-center gap-7 text-2xl">
 	<img src="/skater.gif" alt="skater gif" class="py-16 w-[10rem] mr-[3.5rem]" />
 
+	<a href="/impermanence" class="rotate-[3deg] underline text-blue-600 hover:text-gray-200"
+		>impernanence</a
+	>
+
 	<a href="/liquids" class="rotate-[8deg] underline text-blue-600 hover:text-gray-200">liquids</a>
 
 	<a href="/jellyfish" class="rotate-[0deg] underline text-blue-600 hover:text-gray-200"
