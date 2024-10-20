@@ -1,17 +1,20 @@
 <script lang="ts">
 	import Letterize from 'letterizejs';
 	import { onMount } from 'svelte';
-	import { scale, rotate, offsetPos, resetPos } from '$lib/animations';
+	import { magnifyEffect, screwEffect, hammerEffect, reset } from './animations';
 	import { distanceToElement } from '$lib/physics';
 	import gsap from 'gsap';
 
 	let hammerMode = false;
+	let driverMode = false;
 
 	const handleHover = (target: HTMLElement) => {
 		if (hammerMode) {
-			offsetPos(target);
+			hammerEffect(target);
+		} else if (driverMode) {
+			screwEffect(target);
 		} else {
-			resetPos(target);
+			reset(target);
 		}
 	};
 
@@ -19,6 +22,7 @@
 	const toolOffsetY = -20; // Vertical offset
 
 	let hammer: HTMLElement;
+	let driver: HTMLElement;
 
 	onMount(() => {
 		const text = new Letterize({
@@ -45,9 +49,9 @@
 		};
 
 		letterizeContainer?.addEventListener('mousemove', (event) => {
-			if (!hammerMode) {
-				handleMove(event.clientX, event.clientY);
-			}
+			// if (!hammerMode) {
+			handleMove(event.clientX, event.clientY);
+			// }
 		});
 
 		letterizeContainer?.addEventListener('touchmove', (event: TouchEvent) => {
@@ -56,11 +60,20 @@
 		});
 
 		const handleMouseMove = (event: MouseEvent) => {
-			if (hammerMode) {
-				const mouseX = event.clientX;
-				const mouseY = event.clientY;
+			const mouseX = event.clientX;
+			const mouseY = event.clientY;
 
+			if (hammerMode) {
 				gsap.to(hammer, {
+					left: mouseX + toolOffsetX,
+					top: mouseY + toolOffsetY,
+					duration: 0.1,
+					ease: 'power3.out'
+				});
+			}
+
+			if (driverMode) {
+				gsap.to(driver, {
 					left: mouseX + toolOffsetX,
 					top: mouseY + toolOffsetY,
 					duration: 0.1,
@@ -74,7 +87,9 @@
 
 	let hammerPos = { left: 'calc(100vw - 50px)', top: '50%' };
 
-	function pickUpTool() {
+	let driverPos = { left: 'calc(100vw - 50px)', top: '60%' };
+
+	function pickUpHammer() {
 		hammerMode = true;
 
 		gsap.to('.hammer', {
@@ -86,17 +101,36 @@
 		});
 	}
 
+	function pickUpDriver() {
+		driverMode = true;
+	}
+
 	function putDownTool() {
-		if (!hammerMode) return;
+		if (hammerMode) {
+			hammerMode = false;
 
-		hammerMode = false;
+			const pos = hammer.getBoundingClientRect();
+			const vw = window.innerWidth;
+			const vh = window.innerHeight;
+			hammerPos = {
+				left: `${((pos.left - toolOffsetX / 2) / vw) * 100}vw`, // Convert px to vw
+				top: `${((pos.top - toolOffsetY / 2) / vh) * 100}vh` // Convert px to vh
+			};
 
-		const pos = hammer.getBoundingClientRect();
-		hammerPos = {
-			left: `${pos.left - toolOffsetX / 2}px`, // Adjust for the horizontal offset
-			top: `${pos.top - toolOffsetY / 2}px` // Adjust for the vertical offset
-		};
-		gsap.killTweensOf('.hammer');
+			gsap.killTweensOf('.hammer');
+		}
+
+		if (driverMode) {
+			driverMode = false;
+
+			const pos = driver.getBoundingClientRect();
+			const vw = window.innerWidth;
+			const vh = window.innerHeight;
+			driverPos = {
+				left: `${((pos.left - toolOffsetX / 2) / vw) * 100}vw`, // Convert px to vw
+				top: `${((pos.top - toolOffsetY / 2) / vh) * 100}vh` // Convert px to vh
+			};
+		}
 	}
 </script>
 
@@ -119,21 +153,39 @@
 	</button>
 
 	<button
-		on:click={pickUpTool}
-		class="w-8 hammer fixed"
+		on:click={pickUpDriver}
+		class="w-8 driver fixed"
+		style="left: {driverPos.left}; top: {driverPos.top};"
+		class:opacity-0={driverMode}
+	>
+		<img src="/impermanence/driver.png" alt="driver" />
+	</button>
+
+	<button
+		on:click={pickUpHammer}
+		class="w-11 hammer fixed"
 		style="left: {hammerPos.left}; top: {hammerPos.top};"
 		class:opacity-0={hammerMode}
 	>
-		<img src="/impermanence/hammer.png" alt="hammer" />
+		<img src="/impermanence/hammer2.png" alt="hammer" />
 	</button>
 
 	<img
 		bind:this={hammer}
-		src="/impermanence/hammer.png"
+		src="/impermanence/hammer2.png"
 		alt="hammer"
-		class="pointer-events-none w-8 hammer fixed scale-125"
+		class="pointer-events-none w-11 hammer fixed scale-125"
 		style="left: {hammerPos.left}; top: {hammerPos.top};"
 		class:opacity-0={!hammerMode}
+	/>
+
+	<img
+		bind:this={driver}
+		src="/impermanence/driver.png"
+		alt="driver"
+		class="pointer-events-none w-11 hammer fixed scale-125"
+		style="left: {driverPos.left}; top: {driverPos.top};"
+		class:opacity-0={!driverMode}
 	/>
 </div>
 
