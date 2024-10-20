@@ -6,10 +6,6 @@ export default {
       fontFamily: {
         serif: ['"Times New Roman"', 'serif'],
       },
-      cursor: {
-        hammer: 'url(/impermanence/hammer2.png), auto',
-        custom: 'url(/impermanence/cursor.png), auto',
-      },
     },
   },
   plugins: [],

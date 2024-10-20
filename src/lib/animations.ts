@@ -51,3 +51,15 @@ export const resetPos = (e: Element) => {
         y: `0`
     });
 };
+
+export const hammer = (e: Element) => {
+    var tl = gsap.timeline({ delay: 0 });
+
+    tl.to(e, {
+        duration: 1,
+        rotate: `180`,
+        yoyo: true,
+        // repeat: -1,
+        ease: "back.inOut"
+    });
+};

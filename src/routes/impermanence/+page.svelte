@@ -1,8 +1,9 @@
 <script lang="ts">
 	import Letterize from 'letterizejs';
-	import { onMount } from 'svelte';
+	import { afterUpdate, onMount } from 'svelte';
 	import { offsetPos, resetPos } from '$lib/animations';
 	import { distanceToElement } from '$lib/physics';
+	import gsap from 'gsap';
 
 	let breakMode = true;
 
@@ -14,6 +15,8 @@
 		}
 	};
 
+	let hammerImg: HTMLElement;
+
 	onMount(() => {
 		const text = new Letterize({
 			targets: '#letterize p'
@@ -22,7 +25,7 @@
 		const letters = text.listAll;
 
 		letters.forEach((span) => {
-			span.style.display = 'inline-block';
+			(span as HTMLElement).style.display = 'inline-block';
 
 			span.addEventListener('mouseenter', () => handleHover(span as HTMLElement));
 		});
@@ -32,7 +35,7 @@
 		const handleMove = (x: number, y: number) => {
 			letters.forEach((span) => {
 				const distance = distanceToElement(x, y, span as HTMLElement);
-				if (distance < 30) {
+				if (distance < 25) {
 					handleHover(span as HTMLElement);
 				}
 			});
@@ -48,12 +51,46 @@
 			const touch = event.touches[0];
 			handleMove(touch.clientX, touch.clientY);
 		});
+
+		const handleMouseMove = (event: MouseEvent) => {
+			const mouseX = event.clientX;
+			const mouseY = event.clientY;
+
+			gsap.to(hammerImg, {
+				left: mouseX - 30,
+				top: mouseY - 20,
+				duration: 0.1,
+				ease: 'power3.out'
+			});
+		};
+
+		window.addEventListener('mousemove', handleMouseMove);
 	});
+
+	afterUpdate(() => {
+		if (breakMode) {
+			gsap.to('.hammer', {
+				rotation: 40,
+				duration: 1,
+				yoyo: true,
+				repeat: -1,
+				ease: 'back.in'
+			});
+		}
+	});
+
+	function toggleBreakMode() {
+		breakMode = !breakMode;
+
+		gsap.to(hammerImg, {
+			opacity: breakMode ? 1 : 0,
+			duration: 0.1,
+			ease: 'power3.out'
+		});
+	}
 </script>
 
-<div
-	class={`relative flex items-center justify-center min-h-screen ${breakMode ? 'cursor-custom' : 'cursor-hammer'}`}
->
+<div class="relative flex items-center justify-center min-h-screen cursor-pointer">
 	<div id="letterize" class="px-20 mx-auto text-center font-serif font-light text-base">
 		<p class="italic">most plants and web pages have few connections,</p>
 		<p>but well connected hubs like ours</p>
@@ -67,14 +104,21 @@
 		<p class="italic">steps</p>
 	</div>
 
-	<button
-		class="absolute cursor-none top-10 right-10 hover:scale-110"
-		on:click={() => (breakMode = !breakMode)}
-		>{#if breakMode}<img class="w-12" src="/impermanence/hammer.png" alt="hammer" />
+	<button class="absolute top-10 right-10 hover:scale-110" on:click={toggleBreakMode}>
+		{#if breakMode}
+			<img class="w-8 hammer" src="/impermanence/hammer2.png" alt="hammer" />
 		{:else}
-			<img class="w-12" src="/impermanence/cursor.png" alt="cursor" />
-		{/if}</button
-	>
+			<img class="w-8" src="/impermanence/cursor.png" alt="cursor" />
+		{/if}
+	</button>
+
+	<!-- hammer that follows mouse -->
+	<img
+		bind:this={hammerImg}
+		class="pointer-events-none w-8 hammer fixed"
+		src="/impermanence/hammer2.png"
+		alt="hammer"
+	/>
 </div>
 
 <style lang="postcss">
