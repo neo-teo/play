@@ -1,5 +1,7 @@
 import gsap from 'gsap';
 
+const getRandomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+
 export const bouncyBottom = (e: Element) => {
     const windowHeight = window.innerHeight;
     const elementRect = e.getBoundingClientRect();
@@ -42,13 +44,36 @@ export const offsetPos = (e: Element) => {
     });
 };
 
+export const rotate = (e: Element) => {
+    let rotation = getRandomInt(45, 180);
+
+    var tl = gsap.timeline({ delay: 0 });
+    tl.to(e, {
+        duration: 1,
+        rotate: `+=${rotation}`,
+        ease: "back.out"
+    });
+};
+
+export const scale = (e: Element) => {
+    console.log("scaling")
+    var tl = gsap.timeline({ delay: 0 });
+    tl.to(e, {
+        duration: 1,
+        scale: Math.max(0.5, Math.random() * 2.3),
+        ease: "back.out",
+    });
+};
+
 export const resetPos = (e: Element) => {
     var tl = gsap.timeline({ delay: 0 });
 
     tl.to(e, {
         duration: 1,
-        x: `0`,
-        y: `0`
+        rotate: '0',
+        scale: '1',
+        x: '0',
+        y: '0'
     });
 };
 

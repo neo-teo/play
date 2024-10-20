@@ -1,12 +1,11 @@
 <script lang="ts">
 	import Letterize from 'letterizejs';
-	import { afterUpdate, onMount } from 'svelte';
-	import { offsetPos, resetPos } from '$lib/animations';
+	import { onMount } from 'svelte';
+	import { scale, rotate, offsetPos, resetPos } from '$lib/animations';
 	import { distanceToElement } from '$lib/physics';
 	import gsap from 'gsap';
 
-	let breakMode = true;
-	let mouseMoveActive = false;
+	let breakMode = false;
 
 	const handleHover = (target: HTMLElement) => {
 		if (breakMode) {
@@ -16,7 +15,7 @@
 		}
 	};
 
-	let hammerImg: HTMLElement;
+	let hammer: HTMLElement;
 
 	onMount(() => {
 		const text = new Letterize({
@@ -54,11 +53,11 @@
 		});
 
 		const handleMouseMove = (event: MouseEvent) => {
-			if (mouseMoveActive) {
+			if (breakMode) {
 				const mouseX = event.clientX;
 				const mouseY = event.clientY;
 
-				gsap.to(hammerImg, {
+				gsap.to(hammer, {
 					left: mouseX - 30,
 					top: mouseY - 20,
 					duration: 0.1,
@@ -70,22 +69,22 @@
 		window.addEventListener('mousemove', handleMouseMove);
 	});
 
-	function toggleBreakMode() {
-		breakMode = !breakMode;
+	function pickUpTool() {
+		breakMode = true;
 
-		mouseMoveActive = !breakMode;
+		gsap.to('.hammer', {
+			rotation: 40,
+			duration: 1,
+			yoyo: true,
+			repeat: -1,
+			ease: 'back.in'
+		});
+	}
 
-		if (!breakMode) {
-			gsap.to('.hammer', {
-				rotation: 40,
-				duration: 1,
-				yoyo: true,
-				repeat: -1,
-				ease: 'back.in'
-			});
-		} else {
-			gsap.killTweensOf('.hammer');
-		}
+	function putDownTool() {
+		breakMode = false;
+
+		gsap.killTweensOf('.hammer');
 	}
 </script>
 
@@ -103,16 +102,46 @@
 		<p class="italic">steps</p>
 	</div>
 
-	<button class="absolute top-10 right-10 hover:scale-110" on:click={toggleBreakMode}>
-		<img src="/impermanence/tray.png" alt="cursor" />
+	<button
+		class="absolute top-1/2 right-0 transform -translate-y-1/2 top-10 group"
+		on:click={putDownTool}
+	>
+		<img class="w-12" src="/impermanence/long_shelf.png" alt="cursor" />
 	</button>
 
-	<img
-		bind:this={hammerImg}
-		class="pointer-events-none w-8 hammer fixed top-12 right-24"
-		src="/impermanence/hammer.png"
-		alt="hammer"
+	{#if !breakMode}
+		<button
+			on:click={pickUpTool}
+			class="w-8 hammer fixed top-1/2 transform -translate-y-1/2 right-5 hover:scale-125"
+		>
+			<img src="/impermanence/hammer.png" alt="hammer" />
+		</button>
+	{:else}
+		<img
+			bind:this={hammer}
+			src="/impermanence/hammer.png"
+			alt="hammer"
+			class="pointer-events-none w-8 hammer fixed top-1/2 transform -translate-y-1/2 right-5"
+		/>
+	{/if}
+
+	<!-- <img
+		class="pointer-events-none w-9 rotate-[-30deg] fixed top-12 right-40"
+		src="/impermanence/brush.png"
+		alt="brush"
 	/>
+
+	<img
+		class="pointer-events-none w-10 fixed top-12 right-10"
+		src="/impermanence/driver.png"
+		alt="driver"
+	/>
+
+	<img
+		class="pointer-events-none w-12 fixed top-12 right-14"
+		src="/impermanence/magnifier.png"
+		alt="magnifier"
+	/> -->
 </div>
 
 <style lang="postcss">
