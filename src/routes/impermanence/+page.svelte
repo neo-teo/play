@@ -1,32 +1,17 @@
 <script lang="ts">
 	import Letterize from 'letterizejs';
 	import { onMount } from 'svelte';
-	import gsap from 'gsap';
+	import { offsetPos, resetPos } from '$lib/animations';
+	import { distanceToElement } from '$lib/physics';
 
-	function randomOffset() {
-		if (Math.random() < 0.5) {
-			return Math.floor(Math.random() * 11) - 20; // Range [-20, -10]
-		} else {
-			return Math.floor(Math.random() * 11) + 10; // Range [10, 20]
-		}
-	}
+	let breakMode = true;
 
 	onMount(() => {
-		let lastElement: HTMLElement | null = null;
-
 		const handleHover = (target: HTMLElement) => {
-			let xoff = randomOffset();
-			let yoff = randomOffset();
-
-			// Prevent animating the same element multiple times in a row
-			if (target !== lastElement) {
-				lastElement = target; // Update to the new element being touched
-				var tl = gsap.timeline({ delay: 0 });
-				tl.to(target, {
-					duration: 1,
-					x: `+=${xoff}`,
-					y: `+=${yoff}`
-				});
+			if (breakMode) {
+				offsetPos(target);
+			} else {
+				resetPos(target);
 			}
 		};
 
@@ -48,12 +33,18 @@
 
 		letters.forEach((span) => {
 			span.style.display = 'inline-block';
+
 			span.addEventListener('mouseenter', (event) => handleHover(span as HTMLElement)); // Desktop hover interaction
 		});
 
 		// Add the touchmove listener to the whole container to capture finger movements
 		const letterizeContainer = document.getElementById('letterize');
 		letterizeContainer?.addEventListener('touchmove', handleTouchMove);
+	});
+
+	// Add a click event to toggle breakMode
+	window.addEventListener('click', () => {
+		breakMode = !breakMode;
 	});
 </script>
 

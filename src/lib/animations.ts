@@ -1,6 +1,5 @@
 import gsap from 'gsap';
 
-
 export const bouncyBottom = (e: Element) => {
     const windowHeight = window.innerHeight;
     const elementRect = e.getBoundingClientRect();
@@ -19,5 +18,36 @@ export const bouncyBottom = (e: Element) => {
         duration: 4,
         y: `+=${distanceToBottom}`, // Move the element to the bottom dynamically
         ease: 'bounce.out'
+    });
+};
+
+export const offsetPos = (e: Element) => {
+    function randomOffset() {
+        if (Math.random() < 0.5) {
+            return Math.floor(Math.random() * 11) - 20; // Range [-20, -10]
+        } else {
+            return Math.floor(Math.random() * 11) + 10; // Range [10, 20]
+        }
+    }
+
+    let xoff = randomOffset();
+    let yoff = randomOffset();
+
+    var tl = gsap.timeline({ delay: 0 });
+
+    tl.to(e, {
+        duration: 1,
+        x: `+=${xoff}`,
+        y: `+=${yoff}`
+    });
+};
+
+export const resetPos = (e: Element) => {
+    var tl = gsap.timeline({ delay: 0 });
+
+    tl.to(e, {
+        duration: 1,
+        x: `0`,
+        y: `0`
     });
 };

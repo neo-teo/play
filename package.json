@@ -37,6 +37,7 @@
 	"dependencies": {
 		"gsap": "^3.12.5",
 		"letterizejs": "^2.0.1",
+		"matter-js": "^0.20.0",
 		"p5": "^1.10.0",
 		"p5-svelte": "^3.1.2"
 	}
