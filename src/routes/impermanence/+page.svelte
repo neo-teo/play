@@ -5,15 +5,18 @@
 	import { distanceToElement } from '$lib/physics';
 	import gsap from 'gsap';
 
-	let breakMode = false;
+	let hammerMode = false;
 
 	const handleHover = (target: HTMLElement) => {
-		if (breakMode) {
+		if (hammerMode) {
 			offsetPos(target);
 		} else {
 			resetPos(target);
 		}
 	};
+
+	const toolOffsetX = -30; // Horizontal offset
+	const toolOffsetY = -20; // Vertical offset
 
 	let hammer: HTMLElement;
 
@@ -42,7 +45,7 @@
 		};
 
 		letterizeContainer?.addEventListener('mousemove', (event) => {
-			if (!breakMode) {
+			if (!hammerMode) {
 				handleMove(event.clientX, event.clientY);
 			}
 		});
@@ -53,13 +56,13 @@
 		});
 
 		const handleMouseMove = (event: MouseEvent) => {
-			if (breakMode) {
+			if (hammerMode) {
 				const mouseX = event.clientX;
 				const mouseY = event.clientY;
 
 				gsap.to(hammer, {
-					left: mouseX - 30,
-					top: mouseY - 20,
+					left: mouseX + toolOffsetX,
+					top: mouseY + toolOffsetY,
 					duration: 0.1,
 					ease: 'power3.out'
 				});
@@ -69,8 +72,10 @@
 		window.addEventListener('mousemove', handleMouseMove);
 	});
 
+	let hammerPos = { left: 'calc(100vw - 50px)', top: '50%' };
+
 	function pickUpTool() {
-		breakMode = true;
+		hammerMode = true;
 
 		gsap.to('.hammer', {
 			rotation: 40,
@@ -82,8 +87,15 @@
 	}
 
 	function putDownTool() {
-		breakMode = false;
+		if (!hammerMode) return;
 
+		hammerMode = false;
+
+		const pos = hammer.getBoundingClientRect();
+		hammerPos = {
+			left: `${pos.left - toolOffsetX / 2}px`, // Adjust for the horizontal offset
+			top: `${pos.top - toolOffsetY / 2}px` // Adjust for the vertical offset
+		};
 		gsap.killTweensOf('.hammer');
 	}
 </script>
@@ -102,46 +114,27 @@
 		<p class="italic">steps</p>
 	</div>
 
-	<button
-		class="absolute top-1/2 right-0 transform -translate-y-1/2 top-10 group"
-		on:click={putDownTool}
-	>
+	<button class="absolute top-1/2 right-0 transform -translate-y-1/2" on:click={putDownTool}>
 		<img class="w-12" src="/impermanence/long_shelf.png" alt="cursor" />
 	</button>
 
-	{#if !breakMode}
-		<button
-			on:click={pickUpTool}
-			class="w-8 hammer fixed top-1/2 transform -translate-y-1/2 right-5 hover:scale-125"
-		>
-			<img src="/impermanence/hammer.png" alt="hammer" />
-		</button>
-	{:else}
-		<img
-			bind:this={hammer}
-			src="/impermanence/hammer.png"
-			alt="hammer"
-			class="pointer-events-none w-8 hammer fixed top-1/2 transform -translate-y-1/2 right-5"
-		/>
-	{/if}
-
-	<!-- <img
-		class="pointer-events-none w-9 rotate-[-30deg] fixed top-12 right-40"
-		src="/impermanence/brush.png"
-		alt="brush"
-	/>
+	<button
+		on:click={pickUpTool}
+		class="w-8 hammer fixed"
+		style="left: {hammerPos.left}; top: {hammerPos.top};"
+		class:opacity-0={hammerMode}
+	>
+		<img src="/impermanence/hammer.png" alt="hammer" />
+	</button>
 
 	<img
-		class="pointer-events-none w-10 fixed top-12 right-10"
-		src="/impermanence/driver.png"
-		alt="driver"
+		bind:this={hammer}
+		src="/impermanence/hammer.png"
+		alt="hammer"
+		class="pointer-events-none w-8 hammer fixed scale-125"
+		style="left: {hammerPos.left}; top: {hammerPos.top};"
+		class:opacity-0={!hammerMode}
 	/>
-
-	<img
-		class="pointer-events-none w-12 fixed top-12 right-14"
-		src="/impermanence/magnifier.png"
-		alt="magnifier"
-	/> -->
 </div>
 
 <style lang="postcss">
