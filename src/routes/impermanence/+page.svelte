@@ -6,6 +6,7 @@
 	import gsap from 'gsap';
 
 	let breakMode = true;
+	let mouseMoveActive = false;
 
 	const handleHover = (target: HTMLElement) => {
 		if (breakMode) {
@@ -53,22 +54,28 @@
 		});
 
 		const handleMouseMove = (event: MouseEvent) => {
-			const mouseX = event.clientX;
-			const mouseY = event.clientY;
+			if (mouseMoveActive) {
+				const mouseX = event.clientX;
+				const mouseY = event.clientY;
 
-			gsap.to(hammerImg, {
-				left: mouseX - 30,
-				top: mouseY - 20,
-				duration: 0.1,
-				ease: 'power3.out'
-			});
+				gsap.to(hammerImg, {
+					left: mouseX - 30,
+					top: mouseY - 20,
+					duration: 0.1,
+					ease: 'power3.out'
+				});
+			}
 		};
 
 		window.addEventListener('mousemove', handleMouseMove);
 	});
 
-	afterUpdate(() => {
-		if (breakMode) {
+	function toggleBreakMode() {
+		breakMode = !breakMode;
+
+		mouseMoveActive = !breakMode;
+
+		if (!breakMode) {
 			gsap.to('.hammer', {
 				rotation: 40,
 				duration: 1,
@@ -76,17 +83,9 @@
 				repeat: -1,
 				ease: 'back.in'
 			});
+		} else {
+			gsap.killTweensOf('.hammer');
 		}
-	});
-
-	function toggleBreakMode() {
-		breakMode = !breakMode;
-
-		gsap.to(hammerImg, {
-			opacity: breakMode ? 1 : 0,
-			duration: 0.1,
-			ease: 'power3.out'
-		});
 	}
 </script>
 
@@ -105,18 +104,13 @@
 	</div>
 
 	<button class="absolute top-10 right-10 hover:scale-110" on:click={toggleBreakMode}>
-		{#if breakMode}
-			<img class="w-8 hammer" src="/impermanence/hammer2.png" alt="hammer" />
-		{:else}
-			<img class="w-8" src="/impermanence/cursor.png" alt="cursor" />
-		{/if}
+		<img src="/impermanence/tray.png" alt="cursor" />
 	</button>
 
-	<!-- hammer that follows mouse -->
 	<img
 		bind:this={hammerImg}
-		class="pointer-events-none w-8 hammer fixed"
-		src="/impermanence/hammer2.png"
+		class="pointer-events-none w-8 hammer fixed top-12 right-24"
+		src="/impermanence/hammer.png"
 		alt="hammer"
 	/>
 </div>
