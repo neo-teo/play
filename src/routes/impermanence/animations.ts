@@ -69,3 +69,35 @@ export const reset = (e: Element) => {
         y: '0'
     });
 };
+
+export const hammerAnimation = {
+    rotation: 40,
+    duration: 1,
+    yoyo: true,
+    repeat: -1,
+    ease: 'back.in'
+};
+
+export const driverAnimation = {
+    rotation: 5,
+    duration: 0.5,
+    yoyo: true,
+    repeat: -1,
+    ease: 'elastic.inOut'
+};
+
+export const magnifierAnimation = {
+    scale: 1.3,
+    duration: 0.6,
+    yoyo: true,
+    repeat: -1,
+    ease: 'ease.inOut'
+};
+
+export const brushAnimation = {
+    rotation: 20,
+    duration: 1,
+    yoyo: true,
+    repeat: -1,
+    ease: 'sine.inOut'
+};

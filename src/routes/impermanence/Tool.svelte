@@ -3,18 +3,17 @@
 	import gsap from 'gsap';
 
 	export let name: string;
-	export let initialTopPct = '50%';
-
-	export let toolOffsetX = -40;
-	export let toolOffsetY = -30;
-	export let animationConfig: gsap.TweenVars | null = null;
 	export let isActive = false;
+	export let initialTopPct = '50%';
+	export let animationConfig: gsap.TweenVars | null = null;
 
 	let src = `/impermanence/${name}.png`;
 
 	let width: string = 'w-12';
 
 	let initialPosition = { left: 'calc(100vw - 65px)', top: initialTopPct };
+	let toolOffsetX = -40;
+	let toolOffsetY = -30;
 
 	const dispatch = createEventDispatcher();
 	let toolElement: HTMLElement;
