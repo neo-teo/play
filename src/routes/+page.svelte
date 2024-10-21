@@ -1,5 +1,5 @@
-<div class="flex flex-col items-center gap-7 text-2xl">
-	<img src="/skater.gif" alt="skater gif" class="py-16 w-[10rem] mr-[3.5rem]" />
+<div class="flex flex-col items-center gap-7 text-xl">
+	<img src="/skater.gif" alt="skater gif" class="py-8 w-[8rem] mr-[3.5rem]" />
 
 	<a href="/impermanence" class="rotate-[3deg] underline text-blue-600 hover:text-gray-200"
 		>impermanence</a
