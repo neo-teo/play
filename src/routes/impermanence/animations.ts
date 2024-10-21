@@ -1,8 +1,8 @@
+import { getRandomInt } from '$lib/numbers';
 import gsap from 'gsap';
 
-const getRandomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-export const hammerEffect = (e: Element) => {
+export const hammer = (e: Element) => {
     function randomOffset() {
         if (Math.random() < 0.5) {
             return Math.floor(Math.random() * 11) - 20; // Range [-20, -10]
@@ -23,7 +23,7 @@ export const hammerEffect = (e: Element) => {
     });
 };
 
-export const screwEffect = (e: Element) => {
+export const screw = (e: Element) => {
     let rotation = getRandomInt(45, 180);
 
     var tl = gsap.timeline({ delay: 0 });
@@ -34,12 +34,25 @@ export const screwEffect = (e: Element) => {
     });
 };
 
-export const magnifyEffect = (e: Element) => {
-    console.log("scaling")
+export const magnify = (e: Element) => {
     var tl = gsap.timeline({ delay: 0 });
     tl.to(e, {
         duration: 1,
         scale: Math.max(0.5, Math.random() * 2.3),
+        ease: "back.out",
+    });
+};
+
+export const paint = (e: Element) => {
+    const randomHexColorCode = () => {
+        let n = (Math.random() * 0xfffff * 1000000).toString(16);
+        return '#' + n.slice(0, 6);
+    };
+
+    var tl = gsap.timeline({ delay: 0 });
+    tl.to(e, {
+        duration: 1,
+        color: randomHexColorCode(),
         ease: "back.out",
     });
 };
@@ -51,6 +64,7 @@ export const reset = (e: Element) => {
         duration: 1,
         rotate: '0',
         scale: '1',
+        color: 'black',
         x: '0',
         y: '0'
     });

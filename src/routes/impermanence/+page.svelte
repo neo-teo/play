@@ -1,28 +1,68 @@
 <script lang="ts">
 	import Letterize from 'letterizejs';
 	import { onMount } from 'svelte';
-	import { magnifyEffect, screwEffect, hammerEffect, reset } from './animations';
+	import { reset, hammer, screw, magnify, paint } from './animations';
 	import { distanceToElement } from '$lib/physics';
-	import gsap from 'gsap';
+	import Tool from './Tool.svelte';
+	import { getRandomInt } from '$lib/numbers';
 
-	let hammerMode = false;
-	let driverMode = false;
+	let activeTool: string | null = null;
 
-	const handleHover = (target: HTMLElement) => {
-		if (hammerMode) {
-			hammerEffect(target);
-		} else if (driverMode) {
-			screwEffect(target);
-		} else {
-			reset(target);
-		}
+	const hammerAnimation = {
+		rotation: 40,
+		duration: 1,
+		yoyo: true,
+		repeat: -1,
+		ease: 'back.in'
 	};
 
-	const toolOffsetX = -30; // Horizontal offset
-	const toolOffsetY = -20; // Vertical offset
+	const driverAnimation = {
+		rotation: 5,
+		duration: 0.5,
+		yoyo: true,
+		repeat: -1,
+		ease: 'elastic.inOut'
+	};
 
-	let hammer: HTMLElement;
-	let driver: HTMLElement;
+	const magnifierAnimation = {
+		scale: 1.3,
+		duration: 0.6,
+		yoyo: true,
+		repeat: -1,
+		ease: 'ease.inOut'
+	};
+
+	const brushAnimation = {
+		rotation: 20,
+		duration: 1,
+		yoyo: true,
+		repeat: -1,
+		ease: 'sine.inOut'
+	};
+
+	function toolSelect(event: CustomEvent) {
+		const selectedTool = event.detail.toolType;
+		activeTool = activeTool === selectedTool ? null : selectedTool;
+	}
+
+	const handleHover = (target: HTMLElement) => {
+		switch (activeTool) {
+			case 'hammer':
+				hammer(target);
+				break;
+			case 'driver':
+				screw(target);
+				break;
+			case 'magnifier':
+				magnify(target);
+				break;
+			case 'brush':
+				paint(target);
+				break;
+			default:
+				reset(target);
+		}
+	};
 
 	onMount(() => {
 		const text = new Letterize({
@@ -33,8 +73,6 @@
 
 		letters.forEach((span) => {
 			(span as HTMLElement).style.display = 'inline-block';
-
-			span.addEventListener('mouseenter', () => handleHover(span as HTMLElement));
 		});
 
 		const letterizeContainer = document.getElementById('letterize');
@@ -49,89 +87,14 @@
 		};
 
 		letterizeContainer?.addEventListener('mousemove', (event) => {
-			// if (!hammerMode) {
 			handleMove(event.clientX, event.clientY);
-			// }
 		});
 
 		letterizeContainer?.addEventListener('touchmove', (event: TouchEvent) => {
 			const touch = event.touches[0];
 			handleMove(touch.clientX, touch.clientY);
 		});
-
-		const handleMouseMove = (event: MouseEvent) => {
-			const mouseX = event.clientX;
-			const mouseY = event.clientY;
-
-			if (hammerMode) {
-				gsap.to(hammer, {
-					left: mouseX + toolOffsetX,
-					top: mouseY + toolOffsetY,
-					duration: 0.1,
-					ease: 'power3.out'
-				});
-			}
-
-			if (driverMode) {
-				gsap.to(driver, {
-					left: mouseX + toolOffsetX,
-					top: mouseY + toolOffsetY,
-					duration: 0.1,
-					ease: 'power3.out'
-				});
-			}
-		};
-
-		window.addEventListener('mousemove', handleMouseMove);
 	});
-
-	let hammerPos = { left: 'calc(100vw - 50px)', top: '50%' };
-
-	let driverPos = { left: 'calc(100vw - 50px)', top: '60%' };
-
-	function pickUpHammer() {
-		hammerMode = true;
-
-		gsap.to('.hammer', {
-			rotation: 40,
-			duration: 1,
-			yoyo: true,
-			repeat: -1,
-			ease: 'back.in'
-		});
-	}
-
-	function pickUpDriver() {
-		driverMode = true;
-	}
-
-	function putDownTool() {
-		if (hammerMode) {
-			hammerMode = false;
-
-			const pos = hammer.getBoundingClientRect();
-			const vw = window.innerWidth;
-			const vh = window.innerHeight;
-			hammerPos = {
-				left: `${((pos.left - toolOffsetX / 2) / vw) * 100}vw`, // Convert px to vw
-				top: `${((pos.top - toolOffsetY / 2) / vh) * 100}vh` // Convert px to vh
-			};
-
-			gsap.killTweensOf('.hammer');
-		}
-
-		if (driverMode) {
-			driverMode = false;
-
-			const pos = driver.getBoundingClientRect();
-			const vw = window.innerWidth;
-			const vh = window.innerHeight;
-			driverPos = {
-				left: `${((pos.left - toolOffsetX / 2) / vw) * 100}vw`, // Convert px to vw
-				top: `${((pos.top - toolOffsetY / 2) / vh) * 100}vh` // Convert px to vh
-			};
-		}
-	}
 </script>
 
 <div class="relative flex items-center justify-center min-h-screen cursor-pointer">
@@ -148,44 +111,43 @@
 		<p class="italic">steps</p>
 	</div>
 
-	<button class="absolute top-1/2 right-0 transform -translate-y-1/2" on:click={putDownTool}>
-		<img class="w-12" src="/impermanence/long_shelf.png" alt="cursor" />
-	</button>
-
 	<button
-		on:click={pickUpDriver}
-		class="w-8 driver fixed"
-		style="left: {driverPos.left}; top: {driverPos.top};"
-		class:opacity-0={driverMode}
+		class="absolute top-1/2 right-0 transform -translate-y-1/2"
+		on:click={() => (activeTool = null)}
 	>
-		<img src="/impermanence/driver.png" alt="driver" />
+		<img class="w-12" src="/impermanence/long_shelf_detail.png" alt="shelf" />
 	</button>
 
-	<button
-		on:click={pickUpHammer}
-		class="w-11 hammer fixed"
-		style="left: {hammerPos.left}; top: {hammerPos.top};"
-		class:opacity-0={hammerMode}
-	>
-		<img src="/impermanence/hammer2.png" alt="hammer" />
-	</button>
-
-	<img
-		bind:this={hammer}
-		src="/impermanence/hammer2.png"
-		alt="hammer"
-		class="pointer-events-none w-11 hammer fixed scale-125"
-		style="left: {hammerPos.left}; top: {hammerPos.top};"
-		class:opacity-0={!hammerMode}
+	<Tool
+		name="hammer"
+		isActive={activeTool === 'hammer'}
+		initialTopPct={`${getRandomInt(17, 25)}%`}
+		animationConfig={hammerAnimation}
+		on:toolSelect={toolSelect}
 	/>
 
-	<img
-		bind:this={driver}
-		src="/impermanence/driver.png"
-		alt="driver"
-		class="pointer-events-none w-11 hammer fixed scale-125"
-		style="left: {driverPos.left}; top: {driverPos.top};"
-		class:opacity-0={!driverMode}
+	<Tool
+		name="driver"
+		isActive={activeTool === 'driver'}
+		initialTopPct={`${getRandomInt(30, 35)}%`}
+		animationConfig={driverAnimation}
+		on:toolSelect={toolSelect}
+	/>
+
+	<Tool
+		name="magnifier"
+		isActive={activeTool === 'magnifier'}
+		initialTopPct={`${getRandomInt(40, 50)}%`}
+		animationConfig={magnifierAnimation}
+		on:toolSelect={toolSelect}
+	/>
+
+	<Tool
+		name="brush"
+		isActive={activeTool === 'brush'}
+		initialTopPct={`${getRandomInt(65, 77)}%`}
+		animationConfig={brushAnimation}
+		on:toolSelect={toolSelect}
 	/>
 </div>
 

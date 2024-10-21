@@ -2,6 +2,7 @@
 	// @ts-nocheck
 	import { gsap } from 'gsap';
 	import { onMount } from 'svelte';
+	import { getRandomInt } from '$lib/numbers';
 
 	let letters = {
 		r: ['/routine/one_chars/r.png', '/routine/two_chars/r.png', '/routine/three_chars/r.png'],
@@ -12,8 +13,6 @@
 		n: ['/routine/one_chars/n.png', '/routine/two_chars/n.png', '/routine/three_chars/n.png'],
 		e: ['/routine/one_chars/e.png', '/routine/two_chars/e.png', '/routine/three_chars/e.png']
 	};
-
-	const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 	onMount(() => {
 		document.querySelectorAll('.char').forEach((span) => {
