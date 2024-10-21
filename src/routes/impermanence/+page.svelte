@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Letterize from 'letterizejs';
 	import { onMount } from 'svelte';
 	import {
 		reset,
@@ -107,11 +106,12 @@
 </script>
 
 <div class="relative flex flex-col items-center justify-center min-h-screen cursor-pointer">
+	<!-- Poem -->
 	<Poem textArray={textOptions[activeTextIndex]} on:lettersReady={handleLettersReady} />
 
-	<!-- <button class="absolute bottom-5 p-1 border border-black text-sm" on:click={changeText}>
+	<button class="absolute bottom-5 p-1 border border-black text-sm" on:click={changeText}>
 		abc
-	</button> -->
+	</button>
 
 	<!-- Tool tray -->
 	<button
