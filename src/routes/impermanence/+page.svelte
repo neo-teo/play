@@ -15,6 +15,7 @@
 	import Tool from './Tool.svelte';
 	import { getRandomInt } from '$lib/numbers';
 	import Poem from './Poem.svelte';
+	import { poems } from './poems';
 
 	let activeTool: string | null = null;
 
@@ -25,39 +26,14 @@
 		activeTool = activeTool === selectedTool ? null : selectedTool;
 	}
 
-	let activeTextIndex = 0;
-	const textOptions = [
-		[
-			'most plants and web pages have few connections,',
-			'but well connected hubs like ours',
-			'have a lot of links',
-			'and make it possible to traverse the network',
-			'in',
-			'a',
-			'small',
-			'number',
-			'of',
-			'steps'
-		],
-		[
-			'new text, first line',
-			'second line, italic',
-			'third line of something interesting',
-			'a completely new perspective',
-			'in',
-			'another',
-			'dimension',
-			'or',
-			'angle'
-		]
-	];
+	let poemIndex = 0;
 
 	function handleLettersReady(event: any) {
 		letters = event.detail.letters;
 	}
 
 	function changeText() {
-		activeTextIndex = (activeTextIndex + 1) % textOptions.length;
+		poemIndex = (poemIndex + 1) % poems.length;
 	}
 
 	onMount(() => {
@@ -107,10 +83,16 @@
 
 <div class="relative flex flex-col items-center justify-center min-h-screen cursor-pointer">
 	<!-- Poem -->
-	<Poem textArray={textOptions[activeTextIndex]} on:lettersReady={handleLettersReady} />
+	<Poem textArray={poems[poemIndex]} on:lettersReady={handleLettersReady} />
 
-	<button class="absolute bottom-5 p-1 border border-black text-sm" on:click={changeText}>
-		abc
+	<button class="absolute top-5 px-2 border border-black text-sm" on:click={changeText}>
+		<div class="flex flex-col">
+			<div class="flex gap-2">
+				<div class="rotate-[-10deg]">a</div>
+				<div class="rotate-[5deg]">b</div>
+			</div>
+			<div class="rotate-[12deg] mt-[-5px]">c</div>
+		</div>
 	</button>
 
 	<!-- Tool tray -->

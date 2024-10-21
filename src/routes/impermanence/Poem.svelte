@@ -47,7 +47,7 @@
 {#key uniqueId}
 	<div id="letterize-{uniqueId}" class="px-20 mx-auto text-center font-serif font-light text-base">
 		{#each textArray as line, index}
-			<p class={index % 2 === 0 ? 'italic' : ''}>{line}</p>
+			<p class={index === 0 || index === textArray.length - 1 ? 'italic' : ''}>{line}</p>
 		{/each}
 	</div>
 {/key}
