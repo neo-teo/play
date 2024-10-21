@@ -85,8 +85,8 @@
 	<!-- Poem -->
 	<Poem textArray={poems[poemIndex]} on:lettersReady={handleLettersReady} />
 
-	<button class="absolute top-5 px-2 border border-black text-sm" on:click={changeText}>
-		<div class="flex flex-col">
+	<button class="absolute top-5 w-10 h-10 border border-black text-sm" on:click={changeText}>
+		<div class="flex flex-col items-center">
 			<div class="flex gap-2">
 				<div class="rotate-[-10deg]">a</div>
 				<div class="rotate-[5deg]">b</div>
