@@ -9,9 +9,9 @@
 
 	let src = `/impermanence/${name}.png`;
 
-	let width: string = 'w-12';
+	let width: string = 'w-16';
 
-	let initialPosition = { left: 'calc(100vw - 65px)', top: initialTopPct };
+	let initialPosition = { left: 'calc(100vw - 75px)', top: initialTopPct };
 	let toolOffsetX = -40;
 	let toolOffsetY = -30;
 
