@@ -15,23 +15,53 @@
 	import { distanceToElement } from '$lib/physics';
 	import Tool from './Tool.svelte';
 	import { getRandomInt } from '$lib/numbers';
+	import Poem from './Poem.svelte';
 
 	let activeTool: string | null = null;
+
+	let letters: HTMLElement[] = [];
 
 	function toolSelect(event: CustomEvent) {
 		const selectedTool = event.detail.toolType;
 		activeTool = activeTool === selectedTool ? null : selectedTool;
 	}
 
+	let activeTextIndex = 0;
+	const textOptions = [
+		[
+			'most plants and web pages have few connections,',
+			'but well connected hubs like ours',
+			'have a lot of links',
+			'and make it possible to traverse the network',
+			'in',
+			'a',
+			'small',
+			'number',
+			'of',
+			'steps'
+		],
+		[
+			'new text, first line',
+			'second line, italic',
+			'third line of something interesting',
+			'a completely new perspective',
+			'in',
+			'another',
+			'dimension',
+			'or',
+			'angle'
+		]
+	];
+
+	function handleLettersReady(event: any) {
+		letters = event.detail.letters;
+	}
+
+	function changeText() {
+		activeTextIndex = (activeTextIndex + 1) % textOptions.length;
+	}
+
 	onMount(() => {
-		const letters = new Letterize({
-			targets: '#letterize p'
-		}).listAll;
-
-		letters.forEach((span) => {
-			(span as HTMLElement).style.display = 'inline-block';
-		});
-
 		const handleMove = (x: number, y: number) => {
 			for (const span of letters) {
 				let target = span as HTMLElement;
@@ -76,20 +106,12 @@
 	});
 </script>
 
-<div class="relative flex items-center justify-center min-h-screen cursor-pointer">
-	<!-- Text -->
-	<div id="letterize" class="px-20 mx-auto text-center font-serif font-light text-base">
-		<p class="italic">most plants and web pages have few connections,</p>
-		<p>but well connected hubs like ours</p>
-		<p>have a lot of links</p>
-		<p>and make it possible to traverse the network</p>
-		<p>in</p>
-		<p>a</p>
-		<p class="italic">small</p>
-		<p class="italic">number</p>
-		<p class="italic">of</p>
-		<p class="italic">steps</p>
-	</div>
+<div class="relative flex flex-col items-center justify-center min-h-screen cursor-pointer">
+	<Poem textArray={textOptions[activeTextIndex]} on:lettersReady={handleLettersReady} />
+
+	<!-- <button class="absolute bottom-5 p-1 border border-black text-sm" on:click={changeText}>
+		abc
+	</button> -->
 
 	<!-- Tool tray -->
 	<button
