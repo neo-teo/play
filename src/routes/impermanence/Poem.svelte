@@ -23,6 +23,7 @@
 			letters = letterize.listAll;
 			letters.forEach((span) => {
 				(span as HTMLElement).style.display = 'inline-block';
+				(span as HTMLElement).classList.add('z-1');
 			});
 
 			dispatch('lettersReady', { letters });
@@ -45,7 +46,7 @@
 </script>
 
 {#key uniqueId}
-	<div id="letterize-{uniqueId}" class="px-20 mx-auto text-center font-serif font-light text-base">
+	<div id="letterize-{uniqueId}" class="px-20 mx-auto text-center font-serif font-light text-lg">
 		{#each textArray as line, index}
 			<p class={index === 0 || index === textArray.length - 1 ? 'italic' : ''}>{line}</p>
 		{/each}

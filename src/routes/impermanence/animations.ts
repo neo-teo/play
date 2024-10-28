@@ -34,25 +34,55 @@ export const screw = (e: Element) => {
     });
 };
 
+const randomHexColorCode = () => {
+    let n = (Math.random() * 0xfffff * 1000000).toString(16);
+    return '#' + n.slice(0, 6) //+ '80';
+};
+
 export const magnify = (e: Element) => {
     var tl = gsap.timeline({ delay: 0 });
+    let color = randomHexColorCode();
+
     tl.to(e, {
         duration: 1,
-        scale: Math.max(0.5, Math.random() * 2.3),
+        backgroundColor: color,
+        color: color,
+        // scale: Math.max(0.5, Math.random() * 2.3),
         ease: "back.out",
     });
 };
 
 export const paint = (e: Element) => {
-    const randomHexColorCode = () => {
-        let n = (Math.random() * 0xfffff * 1000000).toString(16);
-        return '#' + n.slice(0, 6);
-    };
+
+    function randomOffset() {
+        if (Math.random() < 0.5) {
+            return Math.floor(Math.random() * 11) - 20; // Range [-20, -10]
+        } else {
+            return Math.floor(Math.random() * 11) + 10; // Range [10, 20]
+        }
+    }
+
+    let xoff = randomOffset();
+    let yoff = randomOffset();
+
+    let rotation = getRandomInt(-45, 45);
+
+    let color = randomHexColorCode();
 
     var tl = gsap.timeline({ delay: 0 });
     tl.to(e, {
         duration: 1,
-        color: randomHexColorCode(),
+        // x: `+=${xoff}`,
+        // y: `+=${yoff}`,
+        backgroundColor: color,
+        rotate: rotation,
+        // padding: getRandomInt(5, 10),
+        // boxShadow: '0px 0px 2px 2px ' + color,
+        borderRadius: getRandomInt(0, 100) + '%',
+        // borderRadius: '100%',
+        // width: getRandomInt(50, 100) + "px",
+        // height: getRandomInt(50, 100) + "px",
+        color: color,
         ease: "back.out",
     });
 };
@@ -64,6 +94,10 @@ export const reset = (e: Element) => {
         duration: 1,
         rotate: '0',
         scale: '1',
+        width: 'auto',
+        height: 'auto',
+
+        backgroundColor: 'transparent',
         color: 'black',
         x: '0',
         y: '0'
