@@ -11,7 +11,7 @@ export interface Liftable {
     update(): void;  // called each frame to update physics
 }
 
-// Mixin class to provide default implementations
+// Mixin class to provide default Liftable implementations
 export class LiftableMixin implements Liftable {
     isLifted: boolean = false;
     protected _x: number;
@@ -48,9 +48,9 @@ export class LiftableMixin implements Liftable {
             this._x = newX;
             this._y = newY;
 
-            // Apply friction (more to horizontal than vertical for better arcs)
+            // Apply friction
             this.vx *= this.FRICTION;
-            this.vy *= this.FRICTION;  // Less friction on vertical movement
+            this.vy *= this.FRICTION;
 
             // Stop if moving very slowly
             if (Math.abs(this.vx) < 0.1 && Math.abs(this.vy) < 0.1) {
