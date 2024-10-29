@@ -25,8 +25,15 @@ export class Box extends Obstacle implements Liftable {
         this.isLifted = this.liftableImpl.isLifted;
     }
 
-    drop(): void {
-        this.liftableImpl.drop();
+    update(): void {
+        this.liftableImpl.update();
+        // Update Box's position from the mixin
+        this.x = this.liftableImpl.x;
+        this.y = this.liftableImpl.y;
+    }
+
+    drop(direction: 'left' | 'right' | 'up' | 'down'): void {
+        this.liftableImpl.drop(direction);
         this.isLifted = this.liftableImpl.isLifted;
     }
 

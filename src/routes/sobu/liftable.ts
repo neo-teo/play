@@ -5,9 +5,10 @@ export interface Liftable {
     readonly y: number;
     isLifted: boolean;
     lift(spriteX: number, spriteY: number): void;
-    drop(): void;
+    drop(direction: 'left' | 'right' | 'up' | 'down'): void;
     followSprite(spriteX: number, spriteY: number): void;
     isNearby(spriteX: number, spriteY: number, threshold?: number): boolean;
+    update(): void;  // called each frame to update physics
 }
 
 // Mixin class to provide default implementations
@@ -17,10 +18,60 @@ export class LiftableMixin implements Liftable {
     protected _y: number;
     protected p: p5;
 
+    private vx: number = 0;
+    private vy: number = 0;
+    private readonly FRICTION = 0.95;
+    private readonly THROW_SPEED = 15;
+    private isMoving: boolean = false;
+
     constructor(p: p5, x: number, y: number) {
         this.p = p;
         this._x = x;
         this._y = y;
+    }
+
+    update() {
+        if (this.isMoving && !this.isLifted) {
+            // Calculate new position
+            const newX = this._x + this.vx;
+            const newY = this._y + this.vy;
+
+            // Update position
+            this._x = newX;
+            this._y = newY;
+
+            // Apply friction
+            this.vx *= this.FRICTION;
+            this.vy *= this.FRICTION;
+
+            // Stop if moving very slowly
+            if (Math.abs(this.vx) < 0.1 && Math.abs(this.vy) < 0.1) {
+                this.vx = 0;
+                this.vy = 0;
+                this.isMoving = false;
+            }
+        }
+    }
+
+    drop(direction: 'left' | 'right' | 'up' | 'down'): void {
+        this.isLifted = false;
+        this.isMoving = true;
+
+        // Set initial velocity based on throw direction
+        switch (direction) {
+            case 'left':
+                this.vx = -this.THROW_SPEED;
+                break;
+            case 'right':
+                this.vx = this.THROW_SPEED;
+                break;
+            case 'up':
+                this.vy = -this.THROW_SPEED;
+                break;
+            case 'down':
+                this.vy = this.THROW_SPEED;
+                break;
+        }
     }
 
     get x(): number { return this._x; }
@@ -28,10 +79,9 @@ export class LiftableMixin implements Liftable {
 
     lift(): void {
         this.isLifted = true;
-    }
-
-    drop(): void {
-        this.isLifted = false;
+        this.isMoving = false;
+        this.vx = 0;
+        this.vy = 0;
     }
 
     followSprite(spriteX: number, spriteY: number): void {

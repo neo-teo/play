@@ -126,32 +126,12 @@ export default class Sprite {
 
     private handleLifting(): void {
         if (this.liftedObject) {
-            const THROW_DISTANCE = 100; // pixels
-            let dropX = this.x;
-            let dropY = this.y;
-
-            // Try different positions in order: front, left, right, back
-            const tryPositions = [
-                { x: dropX, y: dropY + THROW_DISTANCE }, // front
-                { x: dropX - THROW_DISTANCE, y: dropY }, // left
-                { x: dropX + THROW_DISTANCE, y: dropY }, // right
-                { x: dropX, y: dropY - THROW_DISTANCE }  // back
-            ];
-
-            // Find first clear position
-            const clearPosition = tryPositions.find(pos =>
-                !this.isColliding(pos.x, pos.y)
-            );
-
-            if (clearPosition) {
-                this.liftedObject.followSprite(clearPosition.x, clearPosition.y);
-                this.liftedObject.drop();
-                this.liftedObject = null;
-            }
-            // If no clear position, don't drop the object
+            // Simply drop/throw the object in the direction we're facing
+            this.liftedObject.drop(this.lastDirection);
+            this.liftedObject = null;
         } else {
+            // Try to pick up a nearby object
             for (const liftable of this.liftableObjects) {
-
                 if (liftable.isNearby(this.x, this.y)) {
                     this.liftedObject = liftable;
                     liftable.lift(this.x, this.y);

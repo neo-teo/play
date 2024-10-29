@@ -26,6 +26,8 @@
 		p.draw = () => {
 			p.background(255);
 
+			evergreen.boxes.forEach((box) => box.update());
+
 			sprite.handleInput();
 			sprite.draw();
 			evergreen.draw();
