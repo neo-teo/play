@@ -55,6 +55,10 @@
 
 			// p.image(resizedImg, 0, 0);
 
+			// TODO: start out with it missing 10 px arbitratily ..
+			// 		then make these pixels animate in one click at a time from left to right...
+			//
+			// NOTE: clean up to save current version and switch to it by flipping a number switch.
 			for (let x = 0; x < p.width; x += pixelSize) {
 				if (!colors[x]) {
 					colors[x] = [];
