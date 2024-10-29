@@ -20,10 +20,13 @@
 			evergreen = new Evergreen(p);
 
 			sprite.setObstacles([...evergreen.walls, ...evergreen.boxes]);
+			sprite.setLiftableObjects(evergreen.boxes);
 		};
 
 		p.draw = () => {
 			p.background(255);
+
+			sprite.handleInput();
 			sprite.draw();
 			evergreen.draw();
 		};

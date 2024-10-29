@@ -1,8 +1,12 @@
 import type p5 from "p5";
 import { Obstacle } from "./obstacle";
+import { LiftableMixin, type Liftable } from "./liftable";
 
-export class Box extends Obstacle {
+export class Box extends Obstacle implements Liftable {
     private static images: p5.Image[] = [];
+    private liftableImpl: LiftableMixin;
+
+    isLifted: boolean = false;
 
     img: p5.Image;
 
@@ -12,7 +16,29 @@ export class Box extends Obstacle {
         this.img = p.random(Box.images);
         this.width = this.img.width;
         this.height = this.img.height;
-        console.log("constructing w img", this.img);
+
+        this.liftableImpl = new LiftableMixin(p, x, y);
+    }
+
+    lift(spriteX: number, spriteY: number): void {
+        this.liftableImpl.lift();
+        this.isLifted = this.liftableImpl.isLifted;
+    }
+
+    drop(): void {
+        this.liftableImpl.drop();
+        this.isLifted = this.liftableImpl.isLifted;
+    }
+
+    followSprite(spriteX: number, spriteY: number): void {
+        this.liftableImpl.followSprite(spriteX, spriteY);
+        // Update Box's position from the mixin
+        this.x = this.liftableImpl.x;
+        this.y = this.liftableImpl.y;
+    }
+
+    isNearby(spriteX: number, spriteY: number, threshold?: number): boolean {
+        return this.liftableImpl.isNearby(spriteX, spriteY, threshold);
     }
 
     static loadImages(p: p5): void {

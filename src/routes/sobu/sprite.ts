@@ -2,6 +2,7 @@ import p5 from 'p5'; // Import the p5 library
 
 // Assuming you have the Obstacle class already defined somewhere
 import { Obstacle } from './obstacle';
+import type { Liftable } from './liftable';
 
 export default class Sprite {
     private static images: { [key: string]: p5.Image } = {};
@@ -15,6 +16,10 @@ export default class Sprite {
     private friction: number;  // Friction for sliding effect
     private speed: number;      // Speed of movement
     private obstacles: Obstacle[]; // Array of obstacles
+    private liftedObject: Liftable | null = null;
+    private liftableObjects: Liftable[] = [];
+    private lastLiftTime: number = 0;
+    private LIFT_COOLDOWN: number = 250; // 250ms cooldown
 
     constructor(p: p5) {
         this.p = p;  // Store the p5 instance
@@ -42,8 +47,14 @@ export default class Sprite {
         this.obstacles = obstacles;
     }
 
+    setLiftableObjects(liftables: Liftable[]): void {
+        this.liftableObjects = liftables;
+    }
+
     private isColliding(x: number, y: number): boolean {
         return this.obstacles.some(obstacle =>
+            // If it's a Liftable, only collide if it's not lifted
+            !('isLifted' in obstacle && (obstacle as unknown as Liftable).isLifted) &&
             obstacle.isColliding(x, y, this.img.width, this.img.height)
         );
     }
@@ -51,6 +62,34 @@ export default class Sprite {
     setDirection(direction: keyof typeof Sprite.images): void {
         if (direction in Sprite.images) {
             this.img = Sprite.images[direction];
+        }
+    }
+
+    handleInput(): void {
+        const currentTime = Date.now();
+
+        // Handle E key with cooldown
+        if (this.p.keyIsDown(69) && // 69 is 'E' key
+            currentTime - this.lastLiftTime > this.LIFT_COOLDOWN) {
+
+            this.lastLiftTime = currentTime;
+            this.handleLifting();
+        }
+    }
+
+    private handleLifting(): void {
+        if (this.liftedObject) {
+            this.liftedObject.drop();
+            this.liftedObject = null;
+        } else {
+            for (const liftable of this.liftableObjects) {
+
+                if (liftable.isNearby(this.x, this.y)) {
+                    this.liftedObject = liftable;
+                    liftable.lift(this.x, this.y);
+                    break;
+                }
+            }
         }
     }
 
@@ -103,5 +142,9 @@ export default class Sprite {
         this.handleMovement();
         this.update();
         this.p.image(this.img, this.x, this.y);
+
+        if (this.liftedObject) {
+            this.liftedObject.followSprite(this.x, this.y);
+        }
     }
 }
