@@ -6,9 +6,10 @@ import type { Liftable } from './liftable';
 
 export default class Sprite {
     private static images: { [key: string]: p5.Image } = {};
+    private static imagesLoaded: boolean = false;
 
     private p: p5;  // Store the p5 instance
-    private img: p5.Image;
+    private img: p5.Image | null = null
     x: number;
     y: number;
     vx: number;
@@ -21,28 +22,32 @@ export default class Sprite {
     private lastLiftTime: number = 0;
     private LIFT_COOLDOWN: number = 250; // 250ms cooldown
 
-    // private lastDirection: 'left' | 'right' | 'up' | 'down' = 'down';
+    private lastDirection: 'left' | 'right' | 'up' | 'down' = 'down';
 
     constructor(p: p5) {
         this.p = p;  // Store the p5 instance
-        this.img = Sprite.images.resting;
         this.x = 50;
         this.y = 50;
         this.vx = 0;
         this.vy = 0;
-        this.friction = .93;  // Adjust this value for more or less sliding
-        this.speed = .8;
+        this.friction = .80;  // Adjust this value for more or less sliding
+        this.speed = .5;
         this.obstacles = []; // Initialize obstacles array
     }
 
     static loadImages(p: p5): void {
-        this.images = {
-            resting: p.loadImage('/sobu/sprite/rest.gif'),
-            walkingUp: p.loadImage('/sobu/sprite/up.gif'),
-            walkingDown: p.loadImage('/sobu/sprite/down.gif'),
-            walkingLeft: p.loadImage('/sobu/sprite/left.gif'),
-            walkingRight: p.loadImage('/sobu/sprite/right.gif'),
-        };
+        // Load images synchronously in preload
+        this.images.resting = p.loadImage('/sobu/sprite/rest.gif');
+        this.images.walkingUp = p.loadImage('/sobu/sprite/up.gif');
+        this.images.walkingDown = p.loadImage('/sobu/sprite/down.gif');
+        this.images.walkingLeft = p.loadImage('/sobu/sprite/left.gif');
+        this.images.walkingRight = p.loadImage('/sobu/sprite/right.gif');
+        this.images.standingLeft = p.loadImage('/sobu/sprite/left_rest.gif');  // Or separate standing images if you have them
+        this.images.standingRight = p.loadImage('/sobu/sprite/right_rest.gif');
+        this.images.standingUp = p.loadImage('/sobu/sprite/up_rest.gif');
+        this.images.standingDown = p.loadImage('/sobu/sprite/down_rest.gif');
+
+        this.imagesLoaded = true;
     }
 
     setObstacles(obstacles: Obstacle[]): void {
@@ -54,24 +59,23 @@ export default class Sprite {
     }
 
     private isColliding(x: number, y: number): boolean {
+        if (!this.img) return false;
+
         return this.obstacles.some(obstacle =>
             // If it's a Liftable, only collide if it's not lifted
             !('isLifted' in obstacle && (obstacle as unknown as Liftable).isLifted) &&
-            obstacle.isColliding(x, y, this.img.width, this.img.height)
+            obstacle.isColliding(x, y, this.img!.width, this.img!.height)
         );
     }
 
-    setDirection(direction: keyof typeof Sprite.images): void {
-        if (direction in Sprite.images) {
-            this.img = Sprite.images[direction];
-        }
-    }
-
     handleInput(): void {
-        const currentTime = Date.now();
+        // Guard against unloaded images
+        if (!Sprite.images || !this.img) return;
 
-        // Handle E key with cooldown
-        if (this.p.keyIsDown(69) && // 69 is 'E' key
+        const currentTime = Date.now();
+        let moved = false;
+
+        if (this.p.keyIsDown(69) && // 'E' key
             currentTime - this.lastLiftTime > this.LIFT_COOLDOWN) {
 
             this.lastLiftTime = currentTime;
@@ -84,18 +88,35 @@ export default class Sprite {
         // Update acceleration based on key presses
         if (this.p.keyIsDown(this.p.LEFT_ARROW)) {
             ax = -this.speed;
-            this.setDirection('walkingLeft');
+            this.img = Sprite.images.walkingLeft;
+            this.lastDirection = 'left';
+            moved = true;
         } else if (this.p.keyIsDown(this.p.RIGHT_ARROW)) {
             ax = this.speed;
-            this.setDirection('walkingRight');
+            this.img = Sprite.images.walkingRight;
+            this.lastDirection = 'right';
+            moved = true;
         } else if (this.p.keyIsDown(this.p.UP_ARROW)) {
             ay = -this.speed;
-            this.setDirection('walkingUp');
+            this.img = Sprite.images.walkingUp;
+            this.lastDirection = 'up';
+            moved = true;
         } else if (this.p.keyIsDown(this.p.DOWN_ARROW)) {
             ay = this.speed;
-            this.setDirection('walkingDown');
+            this.img = Sprite.images.walkingDown;
+            this.lastDirection = 'down';
+            moved = true;
         } else {
-            this.setDirection('resting');
+            this.img = Sprite.images.resting;
+        }
+
+        if (!moved) {
+            switch (this.lastDirection) {
+                case 'left': this.img = Sprite.images.standingLeft; break;
+                case 'right': this.img = Sprite.images.standingRight; break;
+                case 'up': this.img = Sprite.images.standingUp; break;
+                case 'down': this.img = Sprite.images.standingDown; break;
+            }
         }
 
         // Apply acceleration to velocity
@@ -161,7 +182,11 @@ export default class Sprite {
 
     draw(): void {
         this.update();
-        this.p.image(this.img, this.x, this.y);
+        if (this.img) {
+            this.p.image(this.img, this.x, this.y, this.img.width * 0.8, this.img.height * 0.8);
+        } else if (Sprite.imagesLoaded) {
+            this.img = Sprite.images.resting;
+        }
 
         if (this.liftedObject) {
             this.liftedObject.followSprite(this.x, this.y);
