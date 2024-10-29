@@ -21,6 +21,8 @@ export default class Sprite {
     private lastLiftTime: number = 0;
     private LIFT_COOLDOWN: number = 250; // 250ms cooldown
 
+    // private lastDirection: 'left' | 'right' | 'up' | 'down' = 'down';
+
     constructor(p: p5) {
         this.p = p;  // Store the p5 instance
         this.img = Sprite.images.resting;
@@ -75,25 +77,7 @@ export default class Sprite {
             this.lastLiftTime = currentTime;
             this.handleLifting();
         }
-    }
 
-    private handleLifting(): void {
-        if (this.liftedObject) {
-            this.liftedObject.drop();
-            this.liftedObject = null;
-        } else {
-            for (const liftable of this.liftableObjects) {
-
-                if (liftable.isNearby(this.x, this.y)) {
-                    this.liftedObject = liftable;
-                    liftable.lift(this.x, this.y);
-                    break;
-                }
-            }
-        }
-    }
-
-    handleMovement(): void {
         let ax = 0;
         let ay = 0;
 
@@ -119,6 +103,43 @@ export default class Sprite {
         this.vy += ay;
     }
 
+    private handleLifting(): void {
+        if (this.liftedObject) {
+            const THROW_DISTANCE = 100; // pixels
+            let dropX = this.x;
+            let dropY = this.y;
+
+            // Try different positions in order: front, left, right, back
+            const tryPositions = [
+                { x: dropX, y: dropY + THROW_DISTANCE }, // front
+                { x: dropX - THROW_DISTANCE, y: dropY }, // left
+                { x: dropX + THROW_DISTANCE, y: dropY }, // right
+                { x: dropX, y: dropY - THROW_DISTANCE }  // back
+            ];
+
+            // Find first clear position
+            const clearPosition = tryPositions.find(pos =>
+                !this.isColliding(pos.x, pos.y)
+            );
+
+            if (clearPosition) {
+                this.liftedObject.followSprite(clearPosition.x, clearPosition.y);
+                this.liftedObject.drop();
+                this.liftedObject = null;
+            }
+            // If no clear position, don't drop the object
+        } else {
+            for (const liftable of this.liftableObjects) {
+
+                if (liftable.isNearby(this.x, this.y)) {
+                    this.liftedObject = liftable;
+                    liftable.lift(this.x, this.y);
+                    break;
+                }
+            }
+        }
+    }
+
     update(): void {
         this.vx *= this.friction;
         this.vy *= this.friction;
@@ -139,7 +160,6 @@ export default class Sprite {
     }
 
     draw(): void {
-        this.handleMovement();
         this.update();
         this.p.image(this.img, this.x, this.y);
 
