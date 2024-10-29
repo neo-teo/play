@@ -18,11 +18,15 @@ export class LiftableMixin implements Liftable {
     protected _y: number;
     protected p: p5;
 
+    private isMoving: boolean = false;
+
     private vx: number = 0;
     private vy: number = 0;
-    private readonly FRICTION = 0.95;
-    private readonly THROW_SPEED = 15;
-    private isMoving: boolean = false;
+
+    private readonly FRICTION = 0.90;
+    private readonly THROW_SPEED = 10;
+    private readonly GRAVITY = 1;
+    private readonly THROW_ARC = 5;
 
     constructor(p: p5, x: number, y: number) {
         this.p = p;
@@ -32,6 +36,10 @@ export class LiftableMixin implements Liftable {
 
     update() {
         if (this.isMoving && !this.isLifted) {
+            if (this.vy < 0) {
+                this.vy += this.GRAVITY;
+            }
+
             // Calculate new position
             const newX = this._x + this.vx;
             const newY = this._y + this.vy;
@@ -40,9 +48,9 @@ export class LiftableMixin implements Liftable {
             this._x = newX;
             this._y = newY;
 
-            // Apply friction
+            // Apply friction (more to horizontal than vertical for better arcs)
             this.vx *= this.FRICTION;
-            this.vy *= this.FRICTION;
+            this.vy *= this.FRICTION;  // Less friction on vertical movement
 
             // Stop if moving very slowly
             if (Math.abs(this.vx) < 0.1 && Math.abs(this.vy) < 0.1) {
@@ -61,12 +69,14 @@ export class LiftableMixin implements Liftable {
         switch (direction) {
             case 'left':
                 this.vx = -this.THROW_SPEED;
+                this.vy = -this.THROW_ARC;
                 break;
             case 'right':
                 this.vx = this.THROW_SPEED;
+                this.vy = -this.THROW_ARC;
                 break;
             case 'up':
-                this.vy = -this.THROW_SPEED;
+                this.vy = -this.THROW_SPEED * 1.7;
                 break;
             case 'down':
                 this.vy = this.THROW_SPEED;

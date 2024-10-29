@@ -18,7 +18,7 @@ export class Evergreen {
         this.boxes = [];
 
         for (let i = 0; i < 4; i++) {
-            this.boxes.push(new Box(p, p.random(200, p.windowWidth - 200), p.random(200, p.windowHeight - 200)))
+            this.boxes.push(new Box(p, 200, p.height / 6 * (i + 1)))
         }
     }
 
