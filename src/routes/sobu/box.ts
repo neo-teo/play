@@ -10,10 +10,14 @@ export class Box extends Obstacle implements Liftable, InteractionArea {
 
     img: p5.Image;
 
-    constructor(p: p5, x: number, y: number) {
+    constructor(p: p5, x: number, y: number, size: 'sm' | 'md' | 'lg') {
         super(p, x, y, 50, 50);
 
-        this.img = p.random(Box.images);
+        switch (size) {
+            case 'sm': this.img = Box.images[0]; break;
+            case 'md': this.img = Box.images[1]; break;
+            case 'lg': this.img = Box.images[2]; break;
+        }
         this.width = this.img.width;
         this.height = this.img.height;
 

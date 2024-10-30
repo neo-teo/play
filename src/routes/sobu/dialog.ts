@@ -4,6 +4,14 @@ export class Dialog {
     private readonly script: string[] = [
         "Some thoughts on packing (up) and moving (on)...",
         "287 Evergreen Ave, Bushwick NY\n\nJuly 1st 2024",
+
+        // the day it was raining in wriston, 
+        // the day we moved out of governor street during covid, 
+        // the day I moved out of newton into the city with a suitcase, 
+        //   walked into a horrible pee elevator and someone harassed me, 
+        // and here we are now. 
+
+        // I guess I have to move the boxes to that place to move on in life.
     ];
 
     private p: p5;  // Store the p5 instance
@@ -112,7 +120,7 @@ export class Dialog {
         }
 
         if (this.isWaitingForNext && this.currentScriptIndex === 0) {
-            this.p.textSize(10);
+            this.p.textSize(12);
             this.p.text("space to continue", dialogX + padding, dialogY + boxHeight - paddingY);
         }
     }

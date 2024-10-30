@@ -17,12 +17,17 @@ export class Evergreen {
         ];
 
         this.boxes = [];
-        for (let i = 0; i < 4; i++) {
-            this.boxes.push(new Box(p, 200, p.height / 6 * (i + 1)))
-        }
+        this.boxes.push(new Box(p, p.width / 2 - 75, 190, 'md'));
+        this.boxes.push(new Box(p, p.width / 2, 195, 'md'));
+        this.boxes.push(new Box(p, p.width / 2 - 75, 255, 'md'));
+        this.boxes.push(new Box(p, p.width / 2, 250, 'md'));
+
+        this.boxes.push(new Box(p, p.width / 2 - 200, 225, 'lg'));
+
+        this.boxes.push(new Box(p, p.width / 2 - 125, 180, 'sm'));
 
         this.plants = [];
-        this.plants.push(new Plant(p, 200, 200));
+        // this.plants.push(new Plant(p, p.width / 2 + 100, 180));
     }
 
     draw(): void {

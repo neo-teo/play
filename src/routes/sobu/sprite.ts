@@ -26,12 +26,12 @@ export default class Sprite {
 
     constructor(p: p5) {
         this.p = p;
-        this.x = 50;
-        this.y = 50;
+        this.x = p.width / 2 - 100;
+        this.y = p.height - 200;
         this.vx = 0;
         this.vy = 0;
         this.friction = .80;
-        this.speed = 1.5;
+        this.speed = 1;
         this.obstacles = [];
     }
 
@@ -82,7 +82,6 @@ export default class Sprite {
 
         if (this.p.keyIsDown(69) && // 'E' key
             currentTime - this.lastLiftTime > this.LIFT_COOLDOWN) {
-
             this.lastLiftTime = currentTime;
             this.handleLifting();
         }
@@ -90,7 +89,7 @@ export default class Sprite {
         let ax = 0;
         let ay = 0;
 
-        // Update acceleration based on key presses
+        // Handle horizontal movement
         if (this.p.keyIsDown(this.p.LEFT_ARROW) || this.p.keyIsDown(65)) {
             ax = -this.speed;
             this.img = Sprite.images.walkingLeft;
@@ -101,18 +100,31 @@ export default class Sprite {
             this.img = Sprite.images.walkingRight;
             this.lastDirection = 'right';
             moved = true;
-        } else if (this.p.keyIsDown(this.p.UP_ARROW) || this.p.keyIsDown(87)) {
+        }
+
+        // Handle vertical movement
+        if (this.p.keyIsDown(this.p.UP_ARROW) || this.p.keyIsDown(87)) {
             ay = -this.speed;
-            this.img = Sprite.images.walkingUp;
-            this.lastDirection = 'up';
+            // Only update sprite image if not moving horizontally
+            if (!ax) {
+                this.img = Sprite.images.walkingUp;
+                this.lastDirection = 'up';
+            }
             moved = true;
         } else if (this.p.keyIsDown(this.p.DOWN_ARROW) || this.p.keyIsDown(83)) {
             ay = this.speed;
-            this.img = Sprite.images.walkingDown;
-            this.lastDirection = 'down';
+            // Only update sprite image if not moving horizontally
+            if (!ax) {
+                this.img = Sprite.images.walkingDown;
+                this.lastDirection = 'down';
+            }
             moved = true;
-        } else {
-            this.img = Sprite.images.resting;
+        }
+
+        // Normalize diagonal movement to maintain consistent speed
+        if (ax !== 0 && ay !== 0) {
+            ax *= 0.707; // approximately 1/√2
+            ay *= 0.707;
         }
 
         if (!moved) {
