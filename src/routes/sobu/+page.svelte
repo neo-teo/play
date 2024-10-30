@@ -1,5 +1,6 @@
 <script lang="ts">
 	import P5 from 'p5-svelte';
+	import p5 from 'p5';
 	import type { Sketch } from '$lib/types';
 	import Sprite from './sprite';
 	import { Evergreen } from './evergreen';
@@ -16,14 +17,18 @@
 		let tutorial: Tutorial;
 		let isTutorialActive = true;
 
+		let customFont: p5.Font;
+
 		p.preload = () => {
 			Sprite.loadImages(p);
 			Box.loadImages(p);
 			Plant.loadImages(p);
+
+			customFont = p.loadFont('/sobu/pay2win.ttf');
 		};
 
 		p.setup = () => {
-			p.textFont('Courier New');
+			p.textFont(customFont);
 			p.createCanvas(p.windowWidth, p.windowHeight);
 
 			sprite = new Sprite(p);

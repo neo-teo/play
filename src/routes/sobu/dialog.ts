@@ -49,7 +49,6 @@ export class Dialog {
     }
 
     handleInput(): void {
-
         if (this.p.keyIsPressed && this.p.keyCode === 32) {
             if (this.isWaitingForNext && !this.wasSpacePressed && this.currentScriptIndex < this.script.length - 1) {
                 this.currentScriptIndex++;
@@ -84,8 +83,7 @@ export class Dialog {
         this.p.pop();
 
         this.p.fill(0);
-        this.p.textStyle('bold')
-        this.p.textSize(20);
+        this.p.textSize(15);
 
         const words = this.currentText.split(' ');
         let currentLine = '';
@@ -114,8 +112,7 @@ export class Dialog {
         }
 
         if (this.isWaitingForNext && this.currentScriptIndex === 0) {
-            this.p.textStyle('bold')
-            this.p.textSize(15);
+            this.p.textSize(10);
             this.p.text("space to continue", dialogX + padding, dialogY + boxHeight - paddingY);
         }
     }

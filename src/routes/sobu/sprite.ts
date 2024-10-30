@@ -91,22 +91,22 @@ export default class Sprite {
         let ay = 0;
 
         // Update acceleration based on key presses
-        if (this.p.keyIsDown(this.p.LEFT_ARROW)) {
+        if (this.p.keyIsDown(this.p.LEFT_ARROW) || this.p.keyIsDown(65)) {
             ax = -this.speed;
             this.img = Sprite.images.walkingLeft;
             this.lastDirection = 'left';
             moved = true;
-        } else if (this.p.keyIsDown(this.p.RIGHT_ARROW)) {
+        } else if (this.p.keyIsDown(this.p.RIGHT_ARROW) || this.p.keyIsDown(68)) {
             ax = this.speed;
             this.img = Sprite.images.walkingRight;
             this.lastDirection = 'right';
             moved = true;
-        } else if (this.p.keyIsDown(this.p.UP_ARROW)) {
+        } else if (this.p.keyIsDown(this.p.UP_ARROW) || this.p.keyIsDown(87)) {
             ay = -this.speed;
             this.img = Sprite.images.walkingUp;
             this.lastDirection = 'up';
             moved = true;
-        } else if (this.p.keyIsDown(this.p.DOWN_ARROW)) {
+        } else if (this.p.keyIsDown(this.p.DOWN_ARROW) || this.p.keyIsDown(83)) {
             ay = this.speed;
             this.img = Sprite.images.walkingDown;
             this.lastDirection = 'down';

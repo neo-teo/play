@@ -74,12 +74,11 @@ export class Tutorial {
 
         this.p.push();
         this.p.textAlign('center');
-        this.p.textStyle('bold');
-        this.p.textSize(15);
+        this.p.textSize(20);
 
         const text = this.currentStep === 'movement'
             ? "WASD / Arrows to move"
-            : "E to interact with objects";
+            : "E to interact";
 
         this.p.text(text, this.p.width / 2, this.p.height / 2);
         this.p.pop();
