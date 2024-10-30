@@ -3,7 +3,7 @@ import type p5 from "p5";
 export class Dialog {
     private readonly script: string[] = [
         "Some thoughts on packing (up) and moving (on)...",
-        "287 Evergreen Ave, Bushwick NY\nJuly 1st 2024",
+        "287 Evergreen Ave, Bushwick NY\n\nJuly 1st 2024",
     ];
 
     private p: p5;  // Store the p5 instance
@@ -82,8 +82,6 @@ export class Dialog {
         this.p.strokeWeight(3);
         this.p.rect(dialogX, this.p.height - boxHeight * 1.5, boxWidth, boxHeight);
         this.p.pop();
-
-        this.p.textFont('Courier New'); // Mono font
 
         this.p.fill(0);
         this.p.textStyle('bold')

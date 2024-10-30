@@ -23,7 +23,9 @@
 		};
 
 		p.setup = () => {
+			p.textFont('Courier New');
 			p.createCanvas(p.windowWidth, p.windowHeight);
+
 			sprite = new Sprite(p);
 			evergreen = new Evergreen(p);
 			dialog = new Dialog(p);
