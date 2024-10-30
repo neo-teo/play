@@ -57,6 +57,10 @@ export default class Sprite {
         this.liftableObjects = liftables;
     }
 
+    public hasInteractedRecently(): boolean {
+        return Date.now() - this.lastLiftTime < this.LIFT_COOLDOWN * 2;
+    }
+
     private isColliding(x: number, y: number): boolean {
         if (!this.img) return false;
 
