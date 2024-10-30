@@ -25,18 +25,17 @@ export default class Sprite {
     private lastDirection: 'left' | 'right' | 'up' | 'down' = 'down';
 
     constructor(p: p5) {
-        this.p = p;  // Store the p5 instance
+        this.p = p;
         this.x = 50;
         this.y = 50;
         this.vx = 0;
         this.vy = 0;
-        this.friction = .80;  // Adjust this value for more or less sliding
-        this.speed = .5;
-        this.obstacles = []; // Initialize obstacles array
+        this.friction = .80;
+        this.speed = 1;
+        this.obstacles = [];
     }
 
     static loadImages(p: p5): void {
-        // Load images synchronously in preload
         this.images.resting = p.loadImage('/sobu/sprite/rest.gif');
         this.images.walkingUp = p.loadImage('/sobu/sprite/up.gif');
         this.images.walkingDown = p.loadImage('/sobu/sprite/down.gif');
@@ -61,10 +60,12 @@ export default class Sprite {
     private isColliding(x: number, y: number): boolean {
         if (!this.img) return false;
 
+        const spriteWidth = this.img.width * 0.8;
+        const spriteHeight = this.img.height * 0.8;
+
         return this.obstacles.some(obstacle =>
-            // If it's a Liftable, only collide if it's not lifted
             !('isLifted' in obstacle && (obstacle as unknown as Liftable).isLifted) &&
-            obstacle.isColliding(x, y, this.img!.width, this.img!.height)
+            obstacle.isColliding(x, y, spriteWidth, spriteHeight)
         );
     }
 
@@ -126,19 +127,37 @@ export default class Sprite {
 
     private handleLifting(): void {
         if (this.liftedObject) {
-            // Simply drop/throw the object in the direction we're facing
             this.liftedObject.drop(this.lastDirection);
             this.liftedObject = null;
-        } else {
-            // Try to pick up a nearby object
-            for (const liftable of this.liftableObjects) {
-                if (liftable.isNearby(this.x, this.y)) {
-                    this.liftedObject = liftable;
-                    liftable.lift(this.x, this.y);
-                    break;
+            return;
+        }
+
+        const spriteCenter = {
+            x: this.x + (this.img?.width ?? 0) * 0.4,
+            y: this.y + (this.img?.height ?? 0) * 0.4
+        };
+        let closestLiftable: Liftable | null = null;
+        let closestDistance = Infinity;
+
+        for (const liftable of this.liftableObjects) {
+            if (liftable.isNearby(spriteCenter.x, spriteCenter.y)) {
+                const liftableCenter = liftable.getCollisionBoundsCenter();
+                const dx = liftableCenter.x - spriteCenter.x;
+                const dy = liftableCenter.y - spriteCenter.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestLiftable = liftable;
                 }
             }
         }
+
+        if (closestLiftable) {
+            this.liftedObject = closestLiftable;
+            closestLiftable.lift();
+        }
+
     }
 
     update(): void {

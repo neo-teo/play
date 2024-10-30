@@ -1,8 +1,8 @@
 import type p5 from "p5";
 import { Obstacle } from "./obstacle";
-import { LiftableMixin, type Liftable } from "./liftable";
+import { LiftableMixin, type Liftable, type InteractionArea } from "./liftable";
 
-export class Box extends Obstacle implements Liftable {
+export class Box extends Obstacle implements Liftable, InteractionArea {
     private static images: p5.Image[] = [];
     private liftableImpl: LiftableMixin;
 
@@ -17,10 +17,14 @@ export class Box extends Obstacle implements Liftable {
         this.width = this.img.width;
         this.height = this.img.height;
 
-        this.liftableImpl = new LiftableMixin(p, x, y);
+        this.liftableImpl = new LiftableMixin(p, x, y, this);
     }
 
-    lift(spriteX: number, spriteY: number): void {
+    getCollisionBoundsCenter(): { x: number, y: number } {
+        return this.liftableImpl.getCollisionBoundsCenter();
+    }
+
+    lift(): void {
         this.liftableImpl.lift();
         this.isLifted = this.liftableImpl.isLifted;
     }
@@ -57,8 +61,6 @@ export class Box extends Obstacle implements Liftable {
     }
 
     draw(): void {
-        this.p.fill(150); // Different color for visualization
-        // this.p.rect(this.x, this.y, this.width, this.height);
         this.p.image(this.img, this.x, this.y);
     }
 }

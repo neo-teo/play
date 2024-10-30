@@ -4,6 +4,7 @@
 	import Sprite from './sprite';
 	import { Evergreen } from './evergreen';
 	import { Box } from './box';
+	import { Plant } from './plant';
 
 	const sketch: Sketch = (p) => {
 		let sprite: Sprite;
@@ -12,6 +13,7 @@
 		p.preload = () => {
 			Sprite.loadImages(p);
 			Box.loadImages(p);
+			Plant.loadImages(p);
 		};
 
 		p.setup = () => {
@@ -19,14 +21,15 @@
 			sprite = new Sprite(p);
 			evergreen = new Evergreen(p);
 
-			sprite.setObstacles([...evergreen.walls, ...evergreen.boxes]);
-			sprite.setLiftableObjects(evergreen.boxes);
+			sprite.setObstacles([...evergreen.walls, ...evergreen.boxes, ...evergreen.plants]);
+			sprite.setLiftableObjects([...evergreen.boxes, ...evergreen.plants]);
 		};
 
 		p.draw = () => {
 			p.background(255);
 
 			evergreen.boxes.forEach((box) => box.update());
+			evergreen.plants.forEach((plant) => plant.update());
 
 			sprite.handleInput();
 			sprite.draw();

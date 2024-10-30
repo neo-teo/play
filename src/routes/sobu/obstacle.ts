@@ -1,6 +1,7 @@
 import p5 from "p5";
+import type { InteractionArea } from "./liftable";
 
-export abstract class Obstacle {
+export abstract class Obstacle implements InteractionArea {
     protected p: p5;
     x: number;
     y: number;
@@ -15,12 +16,24 @@ export abstract class Obstacle {
         this.height = height;
     }
 
+    // Default implementation that can be overridden
+    getCollisionBounds() {
+        return {
+            x: this.x,
+            y: this.y,
+            width: this.width,
+            height: this.height
+        };
+    }
+
     isColliding(x: number, y: number, spriteWidth: number, spriteHeight: number): boolean {
+        const bounds = this.getCollisionBounds();
         return (
-            x < this.x + this.width &&
-            x + spriteWidth > this.x &&
-            y < this.y + this.height &&
-            y + spriteHeight > this.y
+            // Using bounds instead of this.x and this.width
+            x < bounds.x + bounds.width &&
+            x + spriteWidth > bounds.x &&
+            y < bounds.y + bounds.height &&
+            y + spriteHeight > bounds.y
         );
     }
 

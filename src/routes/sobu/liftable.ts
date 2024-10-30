@@ -1,14 +1,24 @@
 import type p5 from "p5";
 
+export interface InteractionArea {
+    getCollisionBounds(): {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+    };
+}
+
 export interface Liftable {
     readonly x: number;
     readonly y: number;
     isLifted: boolean;
-    lift(spriteX: number, spriteY: number): void;
+    lift(): void;
     drop(direction: 'left' | 'right' | 'up' | 'down'): void;
     followSprite(spriteX: number, spriteY: number): void;
     isNearby(spriteX: number, spriteY: number, threshold?: number): boolean;
     update(): void;  // called each frame to update physics
+    getCollisionBoundsCenter(): { x: number, y: number };  // New method
 }
 
 // Mixin class to provide default Liftable implementations
@@ -28,10 +38,21 @@ export class LiftableMixin implements Liftable {
     private readonly GRAVITY = 1;
     private readonly THROW_ARC = 5;
 
-    constructor(p: p5, x: number, y: number) {
+    private interactionArea: InteractionArea;
+
+    constructor(p: p5, x: number, y: number, interactionArea: InteractionArea) {
         this.p = p;
         this._x = x;
         this._y = y;
+        this.interactionArea = interactionArea;
+    }
+
+    getCollisionBoundsCenter(): { x: number, y: number } {
+        const bounds = this.interactionArea.getCollisionBounds();
+        return {
+            x: bounds.x + bounds.width / 2,
+            y: bounds.y + bounds.height / 2
+        };
     }
 
     update() {
@@ -96,13 +117,20 @@ export class LiftableMixin implements Liftable {
 
     followSprite(spriteX: number, spriteY: number): void {
         if (this.isLifted) {
-            this._x = spriteX;
-            this._y = spriteY;
+            const bounds = this.interactionArea.getCollisionBounds();
+            const offsetX = bounds.x - this._x;
+            const offsetY = bounds.y - this._y;
+
+            this._x = spriteX - offsetX;
+            this._y = spriteY - offsetY;
         }
     }
 
     isNearby(spriteX: number, spriteY: number, threshold: number = 100): boolean {
-        const distance = this.p.dist(spriteX, spriteY, this.x, this.y);
+        const bounds = this.interactionArea.getCollisionBounds();
+        const centerX = bounds.x + bounds.width / 2;
+        const centerY = bounds.y + bounds.height / 2;
+        const distance = this.p.dist(spriteX, spriteY, centerX, centerY);
         return distance <= threshold;
     }
 }
