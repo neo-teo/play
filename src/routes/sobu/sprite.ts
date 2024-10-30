@@ -31,7 +31,7 @@ export default class Sprite {
         this.vx = 0;
         this.vy = 0;
         this.friction = .80;
-        this.speed = 1;
+        this.speed = 1.5;
         this.obstacles = [];
     }
 
