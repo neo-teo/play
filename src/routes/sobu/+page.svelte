@@ -41,7 +41,7 @@
 		};
 
 		p.draw = () => {
-			if (p.windowWidth < 1000) {
+			if (p.windowWidth < 600) {
 				p.background(0);
 				p.push();
 				p.textAlign('center');

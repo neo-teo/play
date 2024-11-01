@@ -17,7 +17,7 @@ export class Dialog {
         "...",
         "And today is the day I move out of my first New York apartment.",
         "...",
-        "Anyway -- time to move these boxes to the loading zone so I can move on in life.",
+        "Anyway -- time to get these boxes to the loading zone so I can move on in life.",
     ];
 
     private p: p5;  // Store the p5 instance

@@ -3,13 +3,28 @@ import { Obstacle } from "./obstacle";
 import { LiftableMixin, type Liftable, type InteractionArea } from "./liftable";
 
 export class Plant extends Obstacle implements Liftable, InteractionArea {
-    private static plantImg: p5.Image;
+    private static images: p5.Image[] = [];
     private liftableImpl: LiftableMixin;
     isLifted: boolean = false;
     img: p5.Image;
 
     private readonly potWidth = 45;
     private readonly potHeight = 30;
+
+    constructor(p: p5, x: number, y: number, type: 'snake' | 'bird') {
+        super(p, x, y, 50, 50);
+
+        switch (type) {
+            case 'bird': this.img = Plant.images[0]; break;
+            case 'snake': this.img = Plant.images[1]; break;
+        }
+
+        // this.img = Plant.plantImg;
+        this.width = this.img.width;
+        this.height = this.img.height;
+
+        this.liftableImpl = new LiftableMixin(p, x, y, this);
+    }
 
     getCollisionBounds() {
         return {
@@ -22,16 +37,6 @@ export class Plant extends Obstacle implements Liftable, InteractionArea {
 
     getCollisionBoundsCenter(): { x: number, y: number } {
         return this.liftableImpl.getCollisionBoundsCenter();
-    }
-
-    constructor(p: p5, x: number, y: number) {
-        super(p, x, y, 50, 50);
-
-        this.img = Plant.plantImg;
-        this.width = this.img.width;
-        this.height = this.img.height;
-
-        this.liftableImpl = new LiftableMixin(p, x, y, this);
     }
 
     lift(): void {
@@ -61,7 +66,11 @@ export class Plant extends Obstacle implements Liftable, InteractionArea {
     }
 
     static loadImages(p: p5): void {
-        this.plantImg = p.loadImage('/sobu/plant.png');
+        // this.plantImg = p.loadImage('/sobu/plants/bird.png');
+        this.images = [
+            p.loadImage('/sobu/plants/bird.png'),
+            p.loadImage('/sobu/plants/snake.png'),
+        ];
     }
 
     draw(): void {
