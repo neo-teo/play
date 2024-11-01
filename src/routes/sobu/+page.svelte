@@ -41,6 +41,17 @@
 		};
 
 		p.draw = () => {
+			if (p.windowWidth < 1000) {
+				p.background(0);
+				p.push();
+				p.textAlign('center');
+				p.textSize(15);
+				p.fill('white');
+				p.text('Sobu is meant to be \nplayed on large devices.', p.width / 2, p.height / 2);
+				p.pop();
+				return;
+			}
+
 			p.background(255);
 
 			sprite.handleInput();

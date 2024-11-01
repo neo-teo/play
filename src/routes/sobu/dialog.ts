@@ -4,14 +4,20 @@ export class Dialog {
     private readonly script: string[] = [
         "Some thoughts on packing (up) and moving (on)...",
         "287 Evergreen Ave, Bushwick NY\n\nJuly 1st 2024",
-
-        // the day it was raining in wriston, 
-        // the day we moved out of governor street during covid, 
-        // the day I moved out of newton into the city with a suitcase, 
-        //   walked into a horrible pee elevator and someone harassed me, 
-        // and here we are now. 
-
-        // I guess I have to move the boxes to that place to move on in life.
+        "I hate moving. It's physically and emotionally exhausting.",
+        "Like seeing all of the random things that you liked and decided to keep...",
+        "... just to realize that they were just taking up space.",
+        "And the golden rule of moving...",
+        "Whenever you think you're close to being done, there's always more to go.",
+        "...",
+        "Moving boxes is like the [separator / marker] of life...",
+        "Like when it poured on Wriston quad and we moved 7 people's belongings with 3 people.",
+        "Or the day we moved out of 102 Governor during the first ever covid isolation period.",
+        "Or the day I moved into the city and had the worst subway experience every on my way in.",
+        "...",
+        "And today is the day I move out of my first New York apartment.",
+        "...",
+        "Anyway -- time to move these boxes to the loading zone so I can move on in life.",
     ];
 
     private p: p5;  // Store the p5 instance
@@ -107,9 +113,9 @@ export class Dialog {
                 y += lineHeight;
 
                 // Prevent text from overflowing box
-                if (y + lineHeight > dialogY + boxHeight - paddingY) {
-                    break;
-                }
+                // if (y + lineHeight > dialogY + boxHeight - paddingY) {
+                //     break;
+                // }
             } else {
                 currentLine = testLine;
             }
