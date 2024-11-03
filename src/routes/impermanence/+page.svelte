@@ -97,10 +97,10 @@
 
 	<!-- Tool tray -->
 	<button
-		class="absolute top-1/2 right-0 transform -translate-y-1/2"
+		class="absolute top-1/2 right-[-5px] transform -translate-y-1/2"
 		on:click={() => (activeTool = null)}
 	>
-		<img class="w-12" src="/impermanence/long_shelf_detail.png" alt="shelf" />
+		<img class="w-16" src="/impermanence/shelf3.png" alt="shelf" />
 	</button>
 
 	<!-- Tools -->

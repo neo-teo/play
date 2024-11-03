@@ -7,7 +7,7 @@
 	export let initialTopPct = '50%';
 	export let animationConfig: gsap.TweenVars | null = null;
 
-	let src = `/impermanence/${name}.png`;
+	let src = `/impermanence/${name}2.png`;
 
 	let width: string = 'w-16';
 
