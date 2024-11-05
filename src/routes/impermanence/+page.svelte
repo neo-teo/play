@@ -100,7 +100,7 @@
 		class="absolute top-1/2 right-[-5px] transform -translate-y-1/2"
 		on:click={() => (activeTool = null)}
 	>
-		<img class="w-16" src="/impermanence/shelf3.png" alt="shelf" />
+		<img class="w-16" src="/impermanence/shelf.png" alt="shelf" />
 	</button>
 
 	<!-- Tools -->

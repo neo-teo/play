@@ -45,9 +45,9 @@ export const magnify = (e: Element) => {
 
     tl.to(e, {
         duration: 1,
-        backgroundColor: color,
-        color: color,
-        // scale: Math.max(0.5, Math.random() * 2.3),
+        // backgroundColor: color,
+        // color: color,
+        scale: Math.max(0.5, Math.random() * 2.3),
         ease: "back.out",
     });
 };
