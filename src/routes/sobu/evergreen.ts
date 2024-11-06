@@ -26,7 +26,8 @@ export class Evergreen {
         this.boxes.push(new Box(p, p.width / 2 + 40, p.height / 2 - 215, 'md'));
         this.boxes.push(new Box(p, p.width / 2 + 100, p.height / 2 - 170, 'md'));
         this.boxes.push(new Box(p, p.width / 2 + 70, p.height / 2 - 275, 'lg'));
-        this.boxes.push(new Box(p, p.width / 2 + 80, p.height / 2 - 315, 'sm'));
+
+        this.boxes.push(new Box(p, p.width / 2 + 50, p.height / 2 + 175, 'sm'));
 
         this.boxes.push(new Box(p, p.width / 2 - 200, p.height / 2 - 210, 'chest'));
         this.plants = [];

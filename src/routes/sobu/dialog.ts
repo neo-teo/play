@@ -2,22 +2,22 @@ import type p5 from "p5";
 
 export class Dialog {
     private readonly script: string[] = [
-        "Some thoughts on packing (up) and moving (on)...",
         "287 Evergreen Ave, Bushwick NY\n\nJuly 1st 2024",
-        "I hate moving. It's physically and emotionally exhausting.",
-        "Like seeing all of the random things that you liked and decided to keep...",
-        "... just to realize that they were just taking up space.",
-        "And the golden rule of moving...",
-        "Whenever you think you're close to being done, there's always more to go.",
+        "Anyway -- time to get these boxes to the bay so I can move on.",
+        "I understand moving is a good time to reflect and all but",
+        "but it is humbling to see the things that you collected when you saw potential",
+        "and realize they are now taking up space.",
+        "As you watch your life become increasingly boxed up just remember",
+        "whenever you think you're close to done, there's more to go.. lol",
         "...",
-        "Moving boxes is like the [separator / marker] of life...",
-        "Like when it poured on Wriston quad and we moved 7 people's belongings with 3 people.",
-        "Or the day we moved out of 102 Governor during the first ever covid isolation period.",
-        "Or the day I moved into the city and had the worst subway experience every on my way in.",
+        "There have been some good ones though.",
+        "Like when it poured on Wriston quad and we moved 7 people's belongings with 3 people,",
+        "or the day we moved out of 102 Governor in a socially isolated world,",
+        "or the day we moved to Bushwick and had our first visit to Dicayagua.",
         "...",
-        "And today is the day I move out of my first New York apartment.",
+        "And today is the day we move out of Evergreen.",
         "...",
-        "Anyway -- time to get these boxes to the loading zone so I can move on in life.",
+        "Anyway -- time to get these boxes to the bay so I can move on in life.",
     ];
 
     private p: p5;  // Store the p5 instance

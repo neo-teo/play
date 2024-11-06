@@ -16,19 +16,19 @@ export class Box extends Obstacle implements Liftable, InteractionArea {
         switch (size) {
             case 'sm':
                 this.img = Box.images[0];
-                this.weight = 35.0;
+                this.weight = 5.0;
                 break;
             case 'md':
                 this.img = Box.images[1];
-                this.weight = 50.0;
+                this.weight = 33.8;
                 break;
             case 'lg':
                 this.img = Box.images[2];
-                this.weight = 75.0;
+                this.weight = 12.5;
                 break;
             case 'chest':
                 this.img = Box.images[3];
-                this.weight = 100.0;
+                this.weight = 112.5;
                 break;
         }
         this.width = this.img.width;

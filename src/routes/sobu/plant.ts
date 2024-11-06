@@ -17,11 +17,11 @@ export class Plant extends Obstacle implements Liftable, InteractionArea {
         switch (type) {
             case 'bird':
                 this.img = Plant.images[0];
-                this.weight = 25.0;  // Birds are lighter
+                this.weight = 8.8;
                 break;
             case 'snake':
                 this.img = Plant.images[1];
-                this.weight = 40.0;  // Snake plants are heavier
+                this.weight = 4.3;
                 break;
         }
 

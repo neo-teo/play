@@ -15,7 +15,9 @@ export default class Sprite {
     vx: number;
     vy: number;
     private friction: number;  // Friction for sliding effect
-    private speed: number;      // Speed of movement
+    private speed: number;
+    private baseSpeed: number;
+
     private obstacles: Obstacle[]; // Array of obstacles
     private liftedObject: Liftable | null = null;
     private liftableObjects: Liftable[] = [];
@@ -31,7 +33,8 @@ export default class Sprite {
         this.vx = 0;
         this.vy = 0;
         this.friction = .80;
-        this.speed = 1;
+        this.baseSpeed = 1;
+        this.speed = this.baseSpeed;
         this.obstacles = [];
     }
 
@@ -76,6 +79,12 @@ export default class Sprite {
     handleInput(): void {
         // Guard against unloaded images
         if (!Sprite.images || !this.img) return;
+
+        this.speed = this.baseSpeed;
+        if (this.liftedObject) {
+            const weight = this.liftedObject.weight;
+            this.speed = this.baseSpeed * (1 / (1 + weight * 0.08));
+        }
 
         const currentTime = Date.now();
         let moved = false;
@@ -173,7 +182,6 @@ export default class Sprite {
             this.liftedObject = closestLiftable;
             closestLiftable.lift();
         }
-
     }
 
     update(): void {
