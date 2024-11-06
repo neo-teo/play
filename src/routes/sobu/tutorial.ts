@@ -74,7 +74,7 @@ export class Tutorial {
 
         this.p.push();
         this.p.textAlign('center');
-        this.p.textSize(20);
+        this.p.textSize(17);
 
         const text = this.currentStep === 'movement'
             ? "WASD / Arrows to move"

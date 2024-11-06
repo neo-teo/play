@@ -36,23 +36,24 @@
 			dialog = new Dialog(p);
 			tutorial = new Tutorial(p);
 
-			sprite.setObstacles([...evergreen.walls, ...evergreen.boxes, ...evergreen.plants]);
-			sprite.setLiftableObjects([...evergreen.boxes, ...evergreen.plants]);
+			let obstacles = [...evergreen.walls, ...evergreen.boxes, ...evergreen.plants];
+			let liftables = [...evergreen.boxes, ...evergreen.plants];
+
+			sprite.setObstacles(obstacles);
+			sprite.setLiftableObjects(liftables);
+
+			evergreen.boxes.forEach((box) => box.setObstacles(obstacles));
+			evergreen.plants.forEach((plant) => plant.setObstacles(obstacles));
 		};
 
 		p.draw = () => {
-			if (p.windowWidth < 600) {
-				p.background(0);
-				p.push();
-				p.textAlign('center');
-				p.textSize(15);
-				p.fill('white');
-				p.text('Sobu is meant to be \nplayed on large devices.', p.width / 2, p.height / 2);
-				p.pop();
+			if (p.windowWidth < 600 || p.windowHeight < 700) {
+				smallDeviceMessage();
 				return;
 			}
-
 			p.background(255);
+
+			evergreen.drawCargobay();
 
 			sprite.handleInput();
 			sprite.draw();
@@ -75,6 +76,16 @@
 				dialog.draw();
 			}
 		};
+
+		function smallDeviceMessage(): void {
+			p.background(0);
+			p.push();
+			p.textAlign('center');
+			p.textSize(15);
+			p.fill('white');
+			p.text('Sobu is meant to be \nplayed on large devices.', p.width / 2, p.height / 2);
+			p.pop();
+		}
 	};
 </script>
 

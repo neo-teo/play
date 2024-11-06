@@ -12,6 +12,7 @@ export interface InteractionArea {
 export interface Liftable {
     readonly x: number;
     readonly y: number;
+    readonly weight: number;  // Add this
     isLifted: boolean;
     lift(): void;
     drop(direction: 'left' | 'right' | 'up' | 'down'): void;
@@ -19,11 +20,14 @@ export interface Liftable {
     isNearby(spriteX: number, spriteY: number, threshold?: number): boolean;
     update(): void;  // called each frame to update physics
     getCollisionBoundsCenter(): { x: number, y: number };  // New method
+    setObstacles(obstacles: InteractionArea[]): void;
 }
 
 // Mixin class to provide default Liftable implementations
 export class LiftableMixin implements Liftable {
+    weight: number = 50.0;  // Default weight as float
     isLifted: boolean = false;
+
     protected _x: number;
     protected _y: number;
     protected p: p5;
@@ -39,6 +43,7 @@ export class LiftableMixin implements Liftable {
     private readonly THROW_ARC = 5;
 
     private interactionArea: InteractionArea;
+    private obstacles: InteractionArea[] = []; // Add this property
 
     constructor(p: p5, x: number, y: number, interactionArea: InteractionArea) {
         this.p = p;
@@ -55,6 +60,39 @@ export class LiftableMixin implements Liftable {
         };
     }
 
+    // Add this method to set obstacles
+    setObstacles(obstacles: InteractionArea[]): void {
+        this.obstacles = obstacles;
+    }
+
+    private isColliding(newX: number, newY: number): boolean {
+        const bounds = this.interactionArea.getCollisionBounds();
+        const width = bounds.width;
+        const height = bounds.height;
+
+        return this.obstacles.some(obstacle => {
+
+            const obstacleBounds = obstacle.getCollisionBounds();
+
+            // Skip collision check if the obstacle has the exact same position and dimensions
+            if (
+                obstacleBounds.x === bounds.x &&
+                obstacleBounds.y === bounds.y &&
+                obstacleBounds.width === bounds.width &&
+                obstacleBounds.height === bounds.height
+            ) {
+                return false;
+            }
+
+            return (
+                newX < obstacleBounds.x + obstacleBounds.width &&
+                newX + width > obstacleBounds.x &&
+                newY < obstacleBounds.y + obstacleBounds.height &&
+                newY + height > obstacleBounds.y
+            );
+        });
+    }
+
     update() {
         if (this.isMoving && !this.isLifted) {
             if (this.vy < 0) {
@@ -65,9 +103,19 @@ export class LiftableMixin implements Liftable {
             const newX = this._x + this.vx;
             const newY = this._y + this.vy;
 
-            // Update position
-            this._x = newX;
-            this._y = newY;
+            // Check for collisions and handle bouncing
+            const BOUNCE_FACTOR = 0.5; // Reduce velocity by 50% on bounce
+
+            if (this.isColliding(newX, this._y)) {
+                this.vx = -this.vx * BOUNCE_FACTOR; // Reverse and reduce horizontal velocity
+            } else {
+                this._x = newX;
+            }
+            if (this.isColliding(this._x, newY)) {
+                this.vy = -this.vy * BOUNCE_FACTOR; // Reverse and reduce vertical velocity
+            } else {
+                this._y = newY;
+            }
 
             // Apply friction
             this.vx *= this.FRICTION;

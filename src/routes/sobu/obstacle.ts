@@ -8,12 +8,16 @@ export abstract class Obstacle implements InteractionArea {
     width: number;
     height: number;
 
+    weight: number;
+
     constructor(p: p5, x: number, y: number, width: number, height: number) {
         this.p = p;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+
+        this.weight = 50.0;
     }
 
     // Default implementation that can be overridden

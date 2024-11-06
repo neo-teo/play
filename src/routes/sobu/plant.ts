@@ -15,8 +15,14 @@ export class Plant extends Obstacle implements Liftable, InteractionArea {
         super(p, x, y, 50, 50);
 
         switch (type) {
-            case 'bird': this.img = Plant.images[0]; break;
-            case 'snake': this.img = Plant.images[1]; break;
+            case 'bird':
+                this.img = Plant.images[0];
+                this.weight = 25.0;  // Birds are lighter
+                break;
+            case 'snake':
+                this.img = Plant.images[1];
+                this.weight = 40.0;  // Snake plants are heavier
+                break;
         }
 
         // this.img = Plant.plantImg;
@@ -24,6 +30,10 @@ export class Plant extends Obstacle implements Liftable, InteractionArea {
         this.height = this.img.height;
 
         this.liftableImpl = new LiftableMixin(p, x, y, this);
+    }
+
+    setObstacles(obstacles: InteractionArea[]): void {
+        this.liftableImpl.setObstacles(obstacles);
     }
 
     getCollisionBounds() {

@@ -27,7 +27,7 @@ export default class Sprite {
     constructor(p: p5) {
         this.p = p;
         this.x = p.width / 2 - 100;
-        this.y = p.height - 200;
+        this.y = p.height / 2 + 150;
         this.vx = 0;
         this.vy = 0;
         this.friction = .80;
