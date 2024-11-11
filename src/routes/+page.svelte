@@ -1,6 +1,12 @@
 <div class="flex flex-col items-center gap-7 text-xl">
 	<img src="/skater.gif" alt="skater gif" class="py-8 w-[8rem] mr-[3.5rem]" />
 
+	<a href="/pygif" class="rotate-[1deg] underline text-blue-600 hover:text-gray-200">pygif</a>
+
+	<a href="https://sobu.teo.fyi" class="rotate-[-3deg] underline text-blue-600 hover:text-gray-200"
+		>sobu</a
+	>
+
 	<a href="/impermanence" class="rotate-[3deg] underline text-blue-600 hover:text-gray-200"
 		>impermanence</a
 	>
