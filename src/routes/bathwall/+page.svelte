@@ -37,8 +37,8 @@
 			p.frameRate(10);
 
 			// Create the slider for both pixel size and image size
-			// pixelSlider = p.createSlider(1, 60, 1);
-			// pixelSlider.position(p.width / 2, p.windowHeight - 100);
+			pixelSlider = p.createSlider(1, 60, 1);
+			pixelSlider.position(p.width / 2, p.windowHeight - 100);
 
 			p.strokeWeight(0.3);
 		};
@@ -57,7 +57,7 @@
 
 			// TODO: start out with it missing 10 px arbitratily ..
 			// 		then make these pixels animate in one click at a time from left to right...
-			//
+
 			// NOTE: clean up to save current version and switch to it by flipping a number switch.
 			for (let x = 0; x < p.width; x += pixelSize) {
 				if (!colors[x]) {
