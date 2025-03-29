@@ -3,20 +3,17 @@
 </script>
 
 <div class="layout">
-	<main>
+	<main class="min-h-screen">
 		<slot />
 	</main>
 
-	<footer>
-		&copy; <a class="text-blue-600" href="https://teo.fyi">Teo Tsivranidis</a> Fall 2024
+	<footer class="pb-2">
+		a sketch by <a class="text-blue-600" href="https://teo.fyi">Teo</a> during Fall 2024
 	</footer>
 </div>
 
 <style>
 	footer {
-		font-family: 'Times New Roman', Times, serif;
-		border-top: 1px black solid;
-		padding: 1rem;
 		text-align: center;
 	}
 

@@ -23,7 +23,7 @@
 	}
 </script>
 
-<div class="flex flex-col gap-5 sm:px-10 py-20 px-5 font-mono sm:text-lg text-base">
+<div class=" flex flex-col gap-5 sm:px-10 py-20 px-5 font-mono sm:text-lg text-base">
 	<CypherInput on:addSentence={addSentence} />
 
 	<Sentences {sentences} />
